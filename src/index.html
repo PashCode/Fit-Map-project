@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- Стилі -->
+    <link rel="stylesheet" href="css/style.min.css" />
+
+    <!-- Фавікон -->
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png" />
+    <link rel="manifest" href="favicon/site.webmanifest" />
+    <link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#000000" />
+    <meta name="msapplication-TileColor" content="#2d89ef" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- Шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <script defer>
+      ;((g) => {
+        var h,
+          a,
+          k,
+          p = 'The Google Maps JavaScript API',
+          c = 'google',
+          l = 'importLibrary',
+          q = '__ib__',
+          m = document,
+          b = window
+        b = b[c] || (b[c] = {})
+        var d = b.maps || (b.maps = {}),
+          r = new Set(),
+          e = new URLSearchParams(),
+          u = () =>
+            h ||
+            (h = new Promise(async (f, n) => {
+              await (a = m.createElement('script'))
+              e.set('libraries', [...r] + '')
+              for (k in g)
+                e.set(
+                  k.replace(/[A-Z]/g, (t) => '_' + t[0].toLowerCase()),
+                  g[k]
+                )
+              e.set('callback', c + '.maps.' + q)
+              a.src = `https://maps.${c}apis.com/maps/api/js?` + e
+              d[q] = f
+              a.onerror = () => (h = n(Error(p + ' could not load.')))
+              a.nonce = m.querySelector('script[nonce]')?.nonce || ''
+              m.head.append(a)
+            }))
+        d[l]
+          ? console.warn(p + ' only loads once. Ignoring:', g)
+          : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)))
+      })({ key: 'AIzaSyAdaPv3OwOWJX9kbh_kYbOKonnCx_3n-00' })
+    </script>
+    <script defer src="js/script.js"></script>
+
+    <title>FitMap</title>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="sidebar__training-none-wrap hidden-training">
+        <p class="sidebar__training-none-text">Ви не додали жодних тренувань до списку</p>
+      </div>
+
+      <div class="header">
+        <div class="header__icons-and-title-wrap">
+          <img class="header__icon-title" src="icons/icons-brand.svg" alt="Иконка заголовка" />
+          <h1 class="header__title">FitMap</h1>
+        </div>
+
+        <div class="header__sort-wrap">
+          <div class="header__icons-and-text-wrap">
+            <p class="header__sort-text">Фільтрувати</p>
+            <img class="header__icon-sort" src="icons/icons-filter.svg" alt="" />
+          </div>
+
+          <div class="header__checkbox-wrap">
+            <p class="header__item-running">Біг</p>
+            <img src="icons/line-filter.svg" alt="" class="header__sort-line" />
+            <!-- <span class="header__line">|</span> -->
+            <p class="header__item-cycling">Велосипед</p>
+            <img src="icons/line-filter.svg" alt="" class="header__sort-line" />
+
+            <!-- <span class="header__line">|</span> -->
+            <!-- <p class="header__item-date">Дата</p> -->
+            <p class="header__item-clear">Скинути фільтри</p>
+          </div>
+        </div>
+
+        <div class="header__error-input-message-wrap">
+          <p class="header__error-input-message">Будь ласка, введіть числа від 1-9</p>
+        </div>
+      </div>
+
+      <ul class="workouts">
+        <form class="form hidden" autocomplete="off">
+          <div class="btn-wrap">
+            <button class="btn-wrap__button">
+              <img class="btn-wrap__icons" src="icons/submit-button-form.svg" alt="" />
+            </button>
+          </div>
+
+          <div class="form__row">
+            <label class="form__label">Тип</label>
+
+            <select class="form__input form__input--type">
+              <option value="running">Біг</option>
+              <option value="cycling">Велосипед</option>
+            </select>
+          </div>
+
+          <div class="form__row">
+            <label class="form__label">Дистанція</label>
+            <input class="form__input form__input--distance" placeholder="кілометрів" title="Введите цифры от 1-9" />
+          </div>
+          <div class="form__row">
+            <label class="form__label">Тривалість</label>
+            <input class="form__input form__input--duration" placeholder="хвилин" title="Введите цифры от 1-9" />
+          </div>
+          <div class="form__row">
+            <label class="form__label">Темп</label>
+            <input class="form__input form__input--cadence" placeholder="кроків" title="Введите цифры от 1-9" />
+          </div>
+          <div class="form__row form__row--hidden">
+            <label class="form__label">Пульс</label>
+            <input class="form__input form__input--pulse" placeholder="ударів/хв" title="Введите цифры от 1-9" />
+          </div>
+        </form>
+      </ul>
+    </div>
+    <div id="map"></div>
+
+    <!-- <div class="start-instruction-wrap-1"> -->
+    <div class="start-instruction-window-1 instruction-hidden">
+      <p class="start-instruction-text-1">
+        Привіт, людино. <br />
+        Тут ти зможеш позначати на карті місця своїх тренувань і стежити за показниками. <br />
+        Щоб почати, клікни на будь-якому місці карти.
+      </p>
+    </div>
+    <!-- </div> -->
+
+    <!-- <div class="start-instruction-wrap-2"> -->
+    <div class="start-instruction-window-2 instruction-hidden">
+      <p class="start-instruction-text-2">Тепер заповни дані справа у кожне поле і відправ →</p>
+    </div>
+    <!-- </div>  -->
+
+    <!-- <div class="start-instruction-wrap-3"> -->
+    <div class="start-instruction-window-3 instruction-hidden">
+      <p class="start-instruction-text-3">
+        Твоя мітка з тренуванням готова. <br />
+        Тепер можешь клікнути на маркер і подивитися свої показники.
+      </p>
+      <!-- <button class="start-instruction-btn-3">Все зрозуміло</button> -->
+    </div>
+
+    <!-- <div class="notification-window-wrap">
+      <div class="notification-window">
+        <div class="notification-content">
+          <div class="notification-window-icon-wrap">
+            <img class="notification-window-icon" src="icons/error-geolocation.png" alt="" />
+          </div>
+          <p class="notification-window-text">Невозможно получить доступ к вашей геолокации из-за настроек приватности.</p>
+        </div>
+        <div class="notification-window-close">&#10006;</div>
+      </div>
+    </div> -->
+  </body>
+</html>

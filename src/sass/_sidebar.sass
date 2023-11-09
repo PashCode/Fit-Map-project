@@ -1,0 +1,81 @@
+.sidebar
+    position: absolute
+    height: 95%
+    width: 38%
+    border-top-left-radius: 1.5rem
+    border-bottom-left-radius: 1.5rem
+    border-top: .1rem solid $color-borders
+    border-bottom: .1rem solid $color-borders
+    border-left: .1rem solid $color-borders
+    border-right: none
+    padding: 3rem 4rem 4rem 4rem
+    display: flex
+    flex-direction: column
+    // align-self: center
+    align-items: center
+    justify-content: flex-start
+    z-index: 100
+    @include respond(big-tablet)
+        justify-content: center
+        height: 50%
+        width: 80%
+        border-right: .1rem solid $color-borders
+        border-bottom: none
+        border-top-left-radius: 1.5rem
+        border-top-right-radius: 1.5rem
+        border-bottom-left-radius: 0
+    @include respond(small-tablet)
+        padding: 1rem 4rem 4rem 4rem
+    @include respond(big-phone)
+        width: 95%
+    @include respond(small-phone)
+        padding: 1rem 2rem 4rem 2rem
+    @include respond(medium-small-phone)
+        padding: 1rem 2rem 2rem 2rem
+        height: 45%
+    &::before
+        content: ""
+        position: absolute
+        top: 0
+        right: 0
+        bottom: 0
+        left: 0
+        border-top-left-radius: 1.5rem
+        border-bottom-left-radius: 1.5rem
+        border-top: .1rem solid $color-borders
+        border-bottom: .1rem solid $color-borders
+        border-left: .1rem solid $color-borders
+        border-right: none
+        backdrop-filter: blur(.3rem)
+        z-index: -1
+        background: $color-sidebar
+        @include respond(big-tablet)
+            border-right: .1rem solid $color-borders
+            border-bottom: none
+            border-top-left-radius: 1.5rem
+            border-top-right-radius: 1.5rem
+            border-bottom-left-radius: 0
+    &__training-none-wrap
+        position: absolute
+        display: flex
+        justify-content: center
+        align-items: center
+    &__training-none-text
+        display: flex
+        align-items: center
+        justify-content: center
+        text-align: center
+        font-size: 1.7rem
+        // background: $color-grey-light
+        border: .1rem solid $color-grey-light
+        border-radius: .5rem
+        color: $color-grey-light
+        width: 100%
+        padding: .8rem
+        font-weight: 500
+
+.hidden-sidebar
+    display: none
+
+.hidden-training
+    display: none

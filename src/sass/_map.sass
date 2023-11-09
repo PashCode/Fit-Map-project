@@ -1,0 +1,68 @@
+#map
+    width: 100%
+    height: 100%
+
+.gm-style .gm-style-iw
+    padding: 1.2rem !important
+    border-radius: .5rem
+    background-color: $color-grey-light !important
+    color: black
+
+.gm-style .gm-style-iw-tc
+    -webkit-filter: none
+    filter: none
+
+.gm-style .gm-style-iw-tc::after
+    background-color: $color-grey-light !important
+
+.gm-style-iw-d
+    overflow: hidden !important
+
+/* справа снизу на карте надписи убрать */
+.gmnoprint div
+    background: none !important
+
+input[type='number']::-webkit-outer-spin-button, input[type='number']::-webkit-inner-spin-button
+    -webkit-appearance: none
+input[type='number'], input[type='number']:hover, input[type='number']:focus
+    appearance: none
+    -moz-appearance: textfield
+
+div.gm-bundled-control div.gmnoprint
+    display: none !important
+
+//////
+
+.info-window-style__item
+    color: $color-black
+    font-weight: 500
+    font-size: 1.2rem
+    @include respond(phone)
+        font-size: 1.3rem
+    &:first-child
+        margin-bottom: .7rem
+
+.info-window-style-metrics
+    font-weight: 700
+
+.info-window-style__purple
+    position: absolute
+    display: block
+    width: .7rem
+    height: 100%
+    left: 0
+    top: 0
+    background-color: $color-label-workout-running
+
+.info-window-style__orange
+    position: absolute
+    display: block
+    width: .7rem
+    height: 100%
+    left: 0
+    top: 0
+    background-color: $color-label-workout-cycling
+
+.map-hidden
+    position: relative
+    z-index: -1

@@ -1,0 +1,106 @@
+.form
+    position: relative
+    background: $color-form
+    border: .1rem solid $color-borders
+    border-radius: .5rem
+    padding: 1.5rem 4.75rem 1.5rem 1.5rem
+    margin-bottom: 1.75rem
+    display: grid
+    grid-template-columns: 1fr 1fr
+    gap: .5rem 2.5rem
+    text-shadow: .2rem .2rem .1rem $color-black
+    height: 9.25rem
+    transition: .5s ease-out
+    &__row
+        display: flex
+        align-items: center
+    &__row--hidden
+        display: none
+    &__label
+        flex: 0 0 40%
+        font-size: 1.4rem
+        @include respond(big-tablet)
+            flex: 0 0 30%
+            margin-right: .5rem
+        @include respond(small-tablet)
+            flex: 0 0 40%
+        @include respond(phone)
+            flex: 0 0 50%
+        @include respond(very-small-phone)
+            flex: 0 0 55%
+    &__input
+        width: 50%
+        padding: .3rem .65rem
+        font-size: 1.4rem
+        border: none
+        outline: none
+        border-radius: .3rem
+        color: $color-text-inputs
+        background: $color-grey-light
+        box-shadow: inset .2rem .5rem 1rem $color-shadows
+        transition: .3s
+        &:focus
+            outline: none
+            background-color: $color-white
+        &--type
+            -webkit-appearance: none
+            -moz-appearance: none
+            appearance: unset
+            cursor: pointer
+            background: $select-arrow-icon no-repeat right .35rem center / 1.2rem, linear-gradient(to left, $color-grey-light 3em, $color-grey-light 3em)
+            @include respond(phone)
+                white-space: nowrap
+                overflow: hidden
+                text-overflow: ellipsis
+            &:focus
+                transition: none
+                background-color: $color-grey-light
+                border: none
+
+.invalid-input-text-color::placeholder, .invalid-input-text-color
+    color: $color-white
+
+.correct-input-text-color::placeholder
+    color: $color-text-inputs
+
+.invalid-animation-input
+    animation: shake .2s linear both
+
+.invalid-input-background-color, .invalid-input-background-color:focus
+    background: $color-errors
+
+.btn-wrap
+    position: absolute
+    display: flex
+    align-self: center
+    right: 0
+    height: 100%
+    &__button
+        display: flex
+        justify-content: center
+        align-items: center
+        width: 4rem
+        border: none
+        border-top-right-radius: .5rem
+        border-bottom-right-radius: .5rem
+        cursor: pointer
+        background-color: $color-button
+        border-left: .1rem solid $color-borders
+        transition: .2s
+    &__icons
+        width: 2.6rem
+        transition: .2s
+    &__button:hover &__icons
+        transform: translateX(.4rem)
+
+.btn-img
+    width: 3rem
+    transition: .2s
+
+.form.hidden
+    transform: translateY(-30rem)
+    height: 0
+    padding: 0rem 4.75rem 0rem 1.5rem
+    margin-bottom: 0
+    opacity: 0
+    transition: all .5s ease-in
