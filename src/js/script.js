@@ -26,7 +26,7 @@ const sidebar = document.querySelector('.sidebar')
 const header = document.querySelector('.header')
 const mapElement = document.getElementById('map')
 const errorMessage = document.querySelector('.header__error-input-message-wrap')
-const focusOnFormInput = document.querySelector('.form__input')
+const focusOnHiddenElement = document.querySelector('.hidden-focus')
 const sortButton = document.querySelector('.header__sort-wrap')
 const sortCheckBox = document.querySelector('.header__checkbox-wrap')
 const logo = document.querySelector('.header__icons-and-title-wrap')
@@ -64,6 +64,7 @@ const logoClick = () => {
 }
 
 logoClick()
+
 //-------------------------------------------------------------------------------------------------------------------
 
 // Функция для отображения карты
@@ -79,10 +80,14 @@ const initializeMap = async () => {
     mapTypeControl: false, // Отображение элемента управления типом карты
     streetViewControl: false, // Отображение элемента управления уличным видом
     fullscreenControl: false, // Отображение элемента управления полноэкранным режимом
+    gestureHandling: 'greedy',
   }
 
   // Присваивание экземпляра переменной map
   map = new Map(document.getElementById('map'), mapOptions)
+
+  // Инструкция для новичков
+  instructionForNewUser(map)
 
   // Вызов функции markersOnMap и передача в эту функцию аргумента map
   clickedOnMap(map)
@@ -105,9 +110,6 @@ const handleGeolocationSuccess = (position) => {
 
   // Создание карты только после получения координат
   initializeMap()
-
-  // Инструкция для новичков
-  instructionForNewUser()
 }
 //------------------------------------------------------------------------------------------------------------------
 
@@ -162,7 +164,6 @@ navigator.geolocation.getCurrentPosition(handleGeolocationSuccess, handleGeoloca
 
 let bouncingMark // Мітка кліка на мапу
 let clickedPosition // Геолокація клікнутого місця на мапі
-let isDragging = false
 
 // Всё, что связано с кликом на карту. Параметр принимает map из функции initializeMap.
 const clickedOnMap = (map) => {
@@ -173,47 +174,40 @@ const clickedOnMap = (map) => {
     }
   }
 
-  map.addListener('mousemove', () => {
-    isDragging = true
-  })
-
   // Добавляю обработчик события клика по карте
   map.addListener('click', (e) => {
-    console.log(e.domEvent.button)
-    if (isDragging && (e.domEvent.button === 0 || e.domEvent.type === 'touchstart')) {
-      // Получение координат кликнутой позиции
-      clickedPosition = {
-        lat: e.latLng.lat(),
-        lng: e.latLng.lng(),
-      }
-
-      // Если метка при клике уже существует, удаляем ее
-      deleteMarkIfVisible()
-
-      // Создаем новую метку ГДЕ КЛИКНУЛИ МЫШКОЙ [для удобства отображения клика перед постановкой метки]
-      bouncingMark = new google.maps.Marker({
-        position: clickedPosition, // Кликнутая позиция
-        map, // Карта
-        animation: google.maps.Animation.BOUNCE, // Анимация прыжков
-        icon: {
-          path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW, // Иконка метки
-          scale: 4, // Размер метки
-          fillColor: 'transparent', // Цвет метки
-          strokeWeight: 1, // Толщина границы
-          strokeColor: 'white', // Цвет границы
-        },
-      })
-
-      // Удаляем класс hidden при клике на карту, чтобы отобразить форму
-      form.classList.remove('hidden')
+    // Получение координат кликнутой позиции
+    clickedPosition = {
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng(),
     }
+
+    // Если метка при клике уже существует, удаляем ее
+    deleteMarkIfVisible()
+
+    // Создаем новую метку ГДЕ КЛИКНУЛИ МЫШКОЙ [для удобства отображения клика перед постановкой метки]
+    bouncingMark = new google.maps.Marker({
+      position: clickedPosition, // Кликнутая позиция
+      map, // Карта
+      animation: google.maps.Animation.BOUNCE, // Анимация прыжков
+      icon: {
+        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW, // Иконка метки
+        scale: 4, // Размер метки
+        fillColor: 'transparent', // Цвет метки
+        strokeWeight: 1, // Толщина границы
+        strokeColor: 'white', // Цвет границы
+      },
+    })
+
+    // Удаляем класс hidden при клике на карту, чтобы отобразить форму
+    form.classList.remove('hidden')
   })
 
   // Удалить метку и спрятать форму при нажатии клавиши "Escape"
   const keydownHandler = (e) => {
     if (e.key === 'Escape') {
       // Прячу фокус на форму
-      focusOnFormInput.focus()
+      focusOnHiddenElement.focus()
 
       // Если метка  уже существует, удаляем ее
       deleteMarkIfVisible()
@@ -294,6 +288,7 @@ const marker = new google.maps.Marker({
   // Добавляем обработчик события клика на маркер
   {
     marker.addListener('click', () => {
+      focusOnHiddenElement.focus()
       // Если маркер закрыт, открываем его
       if (!isOpen) {
         infowindow.open(map, marker)
@@ -311,7 +306,7 @@ const marker = new google.maps.Marker({
     isOpen = false // Устанавливаем флаг isOpen в false при закрытии окна
 
     // При закрытии информационного окна, установить фокус на инпут, иначе фокус будет на метке и будет её обводить.
-    focusOnFormInput.focus()
+    focusOnHiddenElement.focus()
   })
 }
 //-------------------------------------------------------------------------------------------------------------------
@@ -718,19 +713,20 @@ function validateInputs() {
 
       // Проверяем, что элемент является <input>.
       if (el.nodeName === 'INPUT') {
-        // Удаляем все точки, кроме первой
-        const sanitizedValue = value.replace(/[^0-9.]/g, '')
+        // Заменяем все запятые на точки, кроме первой
+        const sanitizedValue = value.replace(/[^0-9,.]/g, '').replace(/,/, '.')
+
         const parts = sanitizedValue.split('.')
 
-        if ((parts.length === 1 && e.data === '.') || (parts.length > 1 && parts[0] === '')) {
-          // Если введена точка в начале или после числа с уже имеющейся точкой, отменяем ввод
+        if ((parts.length === 1 && (e.data === '.' || e.data === ',')) || (parts.length > 1 && parts[0] === '')) {
+          // Если введена точка или запятая в начале или после числа с уже имеющейся точкой или запятой, отменяем ввод
           el.value = parts[1] ? '0.' + parts[1] : '' // Если после 0 есть другие цифры, разрешаем только 0. и далее
-        } else if (parts.length > 2 || (parts.length === 2 && e.data === '.')) {
-          // Если есть более одной точки или попытка ввести точку после числа и точка уже есть, отменяем ввод
+        } else if (parts.length > 2 || (parts.length === 2 && (e.data === '.' || e.data === ','))) {
+          // Если есть более одной точки или запятой или попытка ввести точку или запятую после числа и точка или запятая уже есть, отменяем ввод
           el.value = parts[0] + '.' + parts.slice(1).join('')
         } else {
-          // Проверяем, чтобы 0 не стояло в начале значения, за исключением случая 0 после точки
-          if ((parts[0] === '0' && parts[1] !== '0') || (parts[0] === '0' && e.data !== '.')) {
+          // Проверяем, чтобы 0 не стояло в начале значения, за исключением случая 0 после точки или запятой
+          if ((parts[0] === '0' && parts[1] !== '0') || (parts[0] === '0' && e.data !== '.' && e.data !== ',')) {
             el.value = parts[1] ? '0.' + parts[1] : '' // Если после 0 есть другие цифры, разрешаем только 0. и далее
           } else {
             el.value = sanitizedValue
@@ -846,7 +842,7 @@ changeInput()
 form.addEventListener('submit', handleFormSubmit)
 
 // INSTRUCTION FOR NEW USERS
-const instructionForNewUser = () => {
+const instructionForNewUser = (map) => {
   const startWindow1 = document.querySelector('.start-instruction-window-1')
   const startWindow2 = document.querySelector('.start-instruction-window-2')
   const startWindow3 = document.querySelector('.start-instruction-window-3')
@@ -863,7 +859,7 @@ const instructionForNewUser = () => {
   // Первая инструкция
   if (!localStorage.getItem('visitedInstruction1/2')) {
     showElement(startWindow1)
-    mapElement.addEventListener('click', () => {
+    map.addListener('click', () => {
       if (localStorageEmpty()) {
         hideElement(startWindow1)
         showElement(startWindow2)
@@ -922,19 +918,3 @@ updatePlaceholder()
 
 // Также вызывай функцию при изменении размеров окна
 window.addEventListener('resize', updatePlaceholder)
-
-// function updateOptionText() {
-//   const windowWidth = window.innerWidth
-
-//   if (windowWidth <= 435) {
-//     inputType.options[1].text = 'Вело...'
-//   } else {
-//     inputType.options[1].text = 'Велосипед'
-//   }
-// }
-
-// // Вызови функцию при загрузке страницы
-// updateOptionText()
-
-// // Также вызывай функцию при изменении размеров окна
-// window.addEventListener('resize', updateOptionText)

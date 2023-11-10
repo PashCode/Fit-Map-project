@@ -6,7 +6,8 @@
     padding: 1.2rem !important
     border-radius: .5rem
     background-color: $color-grey-light !important
-    color: black
+    @include respond(phone)
+        padding: 1rem !important
 
 .gm-style .gm-style-iw-tc
     -webkit-filter: none
@@ -17,6 +18,10 @@
 
 .gm-style-iw-d
     overflow: hidden !important
+
+.gm-style-iw-c
+    @include respond(big-tablet)
+        max-width: 300px !important
 
 /* справа снизу на карте надписи убрать */
 .gmnoprint div
@@ -39,11 +44,14 @@ div.gm-bundled-control div.gmnoprint
     font-size: 1.2rem
     @include respond(phone)
         font-size: 1.3rem
+        font-weight: 400
     &:first-child
         margin-bottom: .7rem
 
 .info-window-style-metrics
     font-weight: 700
+    @include respond(phone)
+        font-weight: 600
 
 .info-window-style__purple
     position: absolute

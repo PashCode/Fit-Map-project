@@ -1,6 +1,6 @@
 .sidebar
     position: absolute
-    height: 95%
+    height: 95vh
     width: 38%
     border-top-left-radius: 1.5rem
     border-bottom-left-radius: 1.5rem
@@ -17,7 +17,7 @@
     z-index: 100
     @include respond(big-tablet)
         justify-content: center
-        height: 50%
+        height: 50vh
         width: 80%
         border-right: .1rem solid $color-borders
         border-bottom: none
@@ -32,7 +32,7 @@
         padding: 1rem 2rem 4rem 2rem
     @include respond(medium-small-phone)
         padding: 1rem 2rem 2rem 2rem
-        height: 45%
+
     &::before
         content: ""
         position: absolute
@@ -60,6 +60,7 @@
         display: flex
         justify-content: center
         align-items: center
+        top: 50%
     &__training-none-text
         display: flex
         align-items: center

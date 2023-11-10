@@ -2,7 +2,7 @@
 <html lang="uk">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
     <!-- Стилі -->
@@ -67,6 +67,7 @@
     <title>FitMap</title>
   </head>
   <body>
+    <div class="hidden-focus" tabindex="0"></div>
     <div class="sidebar">
       <div class="sidebar__training-none-wrap hidden-training">
         <p class="sidebar__training-none-text">Ви не додали жодних тренувань до списку</p>
@@ -121,19 +122,43 @@
 
           <div class="form__row">
             <label class="form__label">Дистанція</label>
-            <input class="form__input form__input--distance" placeholder="кілометрів" title="Введите цифры от 1-9" />
+            <input
+              type="tel"
+              inputmode="decimal"
+              class="form__input form__input--distance"
+              placeholder="кілометрів"
+              title="Введите цифры от 1-9"
+            />
           </div>
           <div class="form__row">
             <label class="form__label">Тривалість</label>
-            <input class="form__input form__input--duration" placeholder="хвилин" title="Введите цифры от 1-9" />
+            <input
+              type="tel"
+              inputmode="decimal"
+              class="form__input form__input--duration"
+              placeholder="хвилин"
+              title="Введите цифры от 1-9"
+            />
           </div>
           <div class="form__row">
             <label class="form__label">Темп</label>
-            <input class="form__input form__input--cadence" placeholder="кроків" title="Введите цифры от 1-9" />
+            <input
+              type="tel"
+              inputmode="decimal"
+              class="form__input form__input--cadence"
+              placeholder="кроків"
+              title="Введите цифры от 1-9"
+            />
           </div>
           <div class="form__row form__row--hidden">
             <label class="form__label">Пульс</label>
-            <input class="form__input form__input--pulse" placeholder="ударів/хв" title="Введите цифры от 1-9" />
+            <input
+              type="tel"
+              inputmode="decimal"
+              class="form__input form__input--pulse"
+              placeholder="ударів/хв"
+              title="Введите цифры от 1-9"
+            />
           </div>
         </form>
       </ul>
