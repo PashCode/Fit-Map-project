@@ -31,8 +31,8 @@ const sortButton = document.querySelector('.header__sort-wrap')
 const sortCheckBox = document.querySelector('.header__checkbox-wrap')
 const logo = document.querySelector('.header__icons-and-title-wrap')
 const trainingNothing = document.querySelector('.sidebar__training-none-wrap')
-const discloseWorkoutsContainer = document.querySelector('.sidebar__disclose-training')
-const discloseArrow = document.querySelector('.sidebar__arrow-icons')
+const disclosureWorkoutsContainer = document.querySelector('.sidebar__disclosure-training')
+const disclosureArrow = document.querySelector('.sidebar__arrow-icons')
 
 // Если в локальном хранилище нет данных, то создать пустой массив, чтобы не было ошибок в консоли.
 if (!localStorage.getItem('myWorkouts')) {
@@ -67,14 +67,14 @@ const logoClick = () => {
 
 logoClick()
 
-const discloseWorkouts = (state) => {
-  sidebar.classList[state]('disclose-workouts')
-  discloseArrow.classList[state]('rotate-arrow')
-  discloseWorkoutsContainer.classList[state]('background-close-workouts')
+const disclosureWorkouts = (state) => {
+  sidebar.classList[state]('disclosure-workouts')
+  disclosureArrow.classList[state]('rotate-arrow')
+  disclosureWorkoutsContainer.classList[state]('background-close-workouts')
 }
 
-discloseWorkoutsContainer.addEventListener('click', () => {
-  discloseWorkouts('toggle')
+disclosureWorkoutsContainer.addEventListener('click', () => {
+  disclosureWorkouts('toggle')
 })
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -418,7 +418,7 @@ const movingMapToMarker = () => {
           map.panTo(newCenterDesktop, 500)
         } else {
           map.panTo(newCenterMobile, 1500)
-          discloseWorkouts('remove')
+          disclosureWorkouts('remove')
         }
 
         // Анимация для маркера к которому переместилась карта
