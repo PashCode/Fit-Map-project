@@ -15,6 +15,7 @@
     align-items: center
     justify-content: flex-start
     z-index: 100
+    transition: .7s ease-in-out
     @include respond(big-tablet)
         justify-content: center
         height: 50vh
@@ -29,7 +30,7 @@
     @include respond(big-phone)
         width: 95%
     @include respond(small-phone)
-        padding: 1rem 2rem 4rem 2rem
+        padding: 1rem 2.5rem 4rem 2.5rem
     @include respond(medium-small-phone)
         padding: 1rem 2rem 2rem 2rem
 
@@ -74,9 +75,42 @@
         width: 100%
         padding: .8rem
         font-weight: 500
-
+    &__disclose-training
+        display: none
+        @include respond(big-tablet)
+            position: absolute
+            top: 0
+            right: 2.5rem
+            display: flex
+            justify-content: center
+            align-items: center
+            width: 3.5rem
+            height: 4.5rem
+            cursor: pointer
+            border-radius: 20%
+            border-top-left-radius: 0
+            border-top-right-radius: 0
+            border-top: none
+            background: #2E8B57
+            transition: 1s
+            box-shadow: inset .2rem .5rem 1rem $color-shadows
+    &__arrow-icons
+        display: none
+        @include respond(big-tablet)
+            display: block
+            width: 2rem
+            transform: rotate(180deg)
 .hidden-sidebar
     display: none
 
 .hidden-training
     display: none
+
+.disclose-workouts
+    height: 95vh
+
+.rotate-arrow
+    transform: rotate(360deg)
+
+.background-close-workouts
+    background: $color-errors

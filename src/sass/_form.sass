@@ -11,6 +11,8 @@
     text-shadow: .2rem .2rem .1rem $color-black
     height: 9.25rem
     transition: .5s ease-out
+    @include respond(phone)
+        border: .15rem solid $color-borders
     &__row
         display: flex
         align-items: center
@@ -60,14 +62,17 @@
 .invalid-input-text-color::placeholder, .invalid-input-text-color
     color: $color-white
 
-.correct-input-text-color::placeholder
-    color: $color-text-inputs
+// .correct-input-text-color::placeholder
+//     color: $color-text-inputs
 
 .invalid-animation-input
     animation: shake .2s linear both
 
 .invalid-input-background-color, .invalid-input-background-color:focus
     background: $color-errors
+
+.delay-inputs-after-select
+    background: $color-text-inputs
 
 .btn-wrap
     position: absolute
@@ -87,11 +92,15 @@
         background-color: $color-button
         border-left: .1rem solid $color-borders
         transition: .2s
+        @include respond(phone)
+            border-left: .15rem solid $color-borders
     &__icons
         width: 2.6rem
         transition: .2s
     &__button:hover &__icons
         transform: translateX(.4rem)
+        @include respond(tablet)
+            transform: none
 
 .btn-img
     width: 3rem

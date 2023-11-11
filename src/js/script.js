@@ -31,6 +31,8 @@ const sortButton = document.querySelector('.header__sort-wrap')
 const sortCheckBox = document.querySelector('.header__checkbox-wrap')
 const logo = document.querySelector('.header__icons-and-title-wrap')
 const trainingNothing = document.querySelector('.sidebar__training-none-wrap')
+const discloseWorkoutsContainer = document.querySelector('.sidebar__disclose-training')
+const discloseArrow = document.querySelector('.sidebar__arrow-icons')
 
 // Если в локальном хранилище нет данных, то создать пустой массив, чтобы не было ошибок в консоли.
 if (!localStorage.getItem('myWorkouts')) {
@@ -64,6 +66,16 @@ const logoClick = () => {
 }
 
 logoClick()
+
+const discloseWorkouts = (state) => {
+  sidebar.classList[state]('disclose-workouts')
+  discloseArrow.classList[state]('rotate-arrow')
+  discloseWorkoutsContainer.classList[state]('background-close-workouts')
+}
+
+discloseWorkoutsContainer.addEventListener('click', () => {
+  discloseWorkouts('toggle')
+})
 
 //-------------------------------------------------------------------------------------------------------------------
 
@@ -389,15 +401,25 @@ const movingMapToMarker = () => {
         map.setCenter(markerPosition)
 
         const currentCenter = map.getCenter() // Получение центра карты
+
         const horizontalOffset = -0.025 // Смещение карты левее от дефолтного map.setCenter(markerPosition)
         const newCenterLng = currentCenter.lng() - horizontalOffset // Высчитывание новых нужных мне координат центра карты
-        const newCenter = new google.maps.LatLng(currentCenter.lat(), newCenterLng) // Создание новой LatLng позиции с кастомными координатами
+        const newCenterDesktop = new google.maps.LatLng(currentCenter.lat(), newCenterLng) // Создание новой LatLng позиции с кастомными координатами
+
+        const verticalOffset = 0.006 // Смещение карты выше от дефолтного map.setCenter(markerPosition)
+        const newCenterLat = currentCenter.lat() - verticalOffset // Высчитывание новых нужных мне координат центра карты
+        const newCenterMobile = new google.maps.LatLng(newCenterLat, currentCenter.lng()) // Создание новой LatLng позиции с кастомными координатами
 
         // Уровень зума карты при перемещении карты на нужный маркер
         map.setZoom(14)
 
-        // Установка нового кастомного центра карты с анимацией за 0.5 секунды
-        map.panTo(newCenter, 500)
+        if (window.innerWidth >= 1279) {
+          // Установка нового кастомного центра карты с анимацией за 0.5 секунды
+          map.panTo(newCenterDesktop, 500)
+        } else {
+          map.panTo(newCenterMobile, 1500)
+          discloseWorkouts('remove')
+        }
 
         // Анимация для маркера к которому переместилась карта
         matchingMarker.setAnimation(google.maps.Animation.BOUNCE)
@@ -768,7 +790,7 @@ const handleFormSubmit = (e) => {
 
 // Функция для пометки недопустимого ввода
 const markInvalidInput = (input) => {
-  input.classList.remove('correct-input-text-color')
+  // input.classList.remove('correct-input-text-color')
   input.classList.add('invalid-animation-input', 'invalid-input-text-color', 'invalid-input-background-color')
   // Перерисовка анимации дрожания
   input.classList.remove('invalid-animation-input')
@@ -779,12 +801,7 @@ const markInvalidInput = (input) => {
 
 // Функция для сброса стилей инпута
 const resetInputStyles = (input) => {
-  input.classList.remove(
-    'invalid-input-text-color',
-    'correct-input-text-color',
-    'invalid-animation-input',
-    'invalid-input-background-color'
-  )
+  input.classList.remove('invalid-input-text-color', 'invalid-animation-input', 'invalid-input-background-color')
 }
 //-------------------------------------------------------------------------------------------------------------------
 
@@ -815,13 +832,22 @@ const resetForm = () => {
 // Меняет инпут с метров на высоту и обратно
 const changeInput = () => {
   inputType.addEventListener('change', (e) => {
+    e.preventDefault()
+
     // Очищает заполненные инпуты при переключении вида тренировок
     formInput.forEach((input) => {
       if (input.nodeName === 'INPUT') {
+        // Делаю инпуты disabled на 0.5 секунд, иначе скачет клавиатура
+        input.setAttribute('disabled', 'disabled')
+        input.classList.add('delay-inputs-after-select')
+        setTimeout(() => {
+          input.removeAttribute('disabled')
+          input.classList.remove('delay-inputs-after-select')
+        }, 500)
+
         input.value = ''
         incorrectInputsError('remove')
-        input.classList.remove('invalid-animation-input', 'invalid-input-background-color')
-        input.classList.replace('invalid-input-text-color', 'correct-input-text-color')
+        input.classList.remove('invalid-animation-input', 'invalid-input-background-color', 'invalid-input-text-color')
       }
     })
 
