@@ -1,5 +1,5 @@
 .sidebar
-    position: absolute
+    position: fixed
     height: 95vh
     width: 38%
     border-top-left-radius: 1.5rem
@@ -11,14 +11,13 @@
     padding: 3rem 4rem 4rem 4rem
     display: flex
     flex-direction: column
-    // align-self: center
     align-items: center
     justify-content: flex-start
     z-index: 100
     transition: .7s ease-in-out
     @include respond(big-tablet)
         justify-content: center
-        height: 50vh
+        height: 55vh
         width: 80%
         border-right: .1rem solid $color-borders
         border-bottom: none
@@ -33,7 +32,6 @@
         padding: 1rem 2.5rem 4rem 2.5rem
     @include respond(medium-small-phone)
         padding: 1rem 2rem 2rem 2rem
-
     &::before
         content: ""
         position: absolute
@@ -62,6 +60,8 @@
         justify-content: center
         align-items: center
         top: 50%
+        @include respond(big-tablet)
+            top: 65%
     &__training-none-text
         display: flex
         align-items: center
@@ -69,9 +69,9 @@
         text-align: center
         font-size: 1.7rem
         // background: $color-grey-light
-        border: .1rem solid $color-grey-light
+        border: .1rem solid $color-borders
         border-radius: .5rem
-        color: $color-grey-light
+        color: $color-borders
         width: 100%
         padding: .8rem
         font-weight: 500
@@ -114,3 +114,6 @@
 
 .background-close-workouts
     background: $color-errors
+
+.hidden-message-none-training
+    display: none

@@ -34,6 +34,11 @@ const trainingNothing = document.querySelector('.sidebar__training-none-wrap')
 const disclosureWorkoutsContainer = document.querySelector('.sidebar__disclosure-training')
 const disclosureArrow = document.querySelector('.sidebar__arrow-icons')
 
+// // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+// let vh = window.innerHeight * 0.01
+// // Then we set the value in the --vh custom property to the root of the document
+// sidebar.style.setProperty('--vh', `${vh}px`)
+
 // Если в локальном хранилище нет данных, то создать пустой массив, чтобы не было ошибок в консоли.
 if (!localStorage.getItem('myWorkouts')) {
   localStorage.setItem('myWorkouts', JSON.stringify([]))
@@ -71,6 +76,7 @@ const disclosureWorkouts = (state) => {
   sidebar.classList[state]('disclosure-workouts')
   disclosureArrow.classList[state]('rotate-arrow')
   disclosureWorkoutsContainer.classList[state]('background-close-workouts')
+  mapElement.classList[state]('map-blur')
 }
 
 disclosureWorkoutsContainer.addEventListener('click', () => {
@@ -194,6 +200,11 @@ const clickedOnMap = (map) => {
       lng: e.latLng.lng(),
     }
 
+    // // Если кликнул на карту и в локальном хранилище нет тренировок, то при клике убрать надпись "нет тренировок в списке"
+    // if (clickedPosition && !dataLocalStorage.length) {
+    //   trainingNothing.classList.add('hidden-message-none-training')
+    // }
+
     // Если метка при клике уже существует, удаляем ее
     deleteMarkIfVisible()
 
@@ -213,6 +224,9 @@ const clickedOnMap = (map) => {
 
     // Удаляем класс hidden при клике на карту, чтобы отобразить форму
     form.classList.remove('hidden')
+
+    // Если я нахожусь в конце списка тренировок, то пролистать на самый верх, чтобы видна была форма
+    containerWorkouts.scrollTo(0, -1)
   })
 
   // Удалить метку и спрятать форму при нажатии клавиши "Escape"
@@ -237,6 +251,9 @@ const clickedOnMap = (map) => {
 
       // Добавляю класс hidden, чтобы убрать форму
       form.classList.add('hidden')
+
+      // Убираю надпись про "нет тренировок в списке", если нужно
+      // trainingNothing.classList.remove('hidden-message-none-training')
     }
   }
 
@@ -406,7 +423,7 @@ const movingMapToMarker = () => {
         const newCenterLng = currentCenter.lng() - horizontalOffset // Высчитывание новых нужных мне координат центра карты
         const newCenterDesktop = new google.maps.LatLng(currentCenter.lat(), newCenterLng) // Создание новой LatLng позиции с кастомными координатами
 
-        const verticalOffset = 0.006 // Смещение карты выше от дефолтного map.setCenter(markerPosition)
+        const verticalOffset = 0.0045 // Смещение карты выше от дефолтного map.setCenter(markerPosition)
         const newCenterLat = currentCenter.lat() - verticalOffset // Высчитывание новых нужных мне координат центра карты
         const newCenterMobile = new google.maps.LatLng(newCenterLat, currentCenter.lng()) // Создание новой LatLng позиции с кастомными координатами
 
@@ -773,6 +790,7 @@ const handleFormSubmit = (e) => {
     if (input.value === '' && !input.parentElement.classList.contains('form__row--hidden')) {
       hasEmptyInput = true
       markInvalidInput(input)
+      input.focus()
     } else {
       resetInputStyles(input)
     }
@@ -837,13 +855,15 @@ const changeInput = () => {
     // Очищает заполненные инпуты при переключении вида тренировок
     formInput.forEach((input) => {
       if (input.nodeName === 'INPUT') {
-        // Делаю инпуты disabled на 0.5 секунд, иначе скачет клавиатура
-        input.setAttribute('disabled', 'disabled')
-        input.classList.add('delay-inputs-after-select')
-        setTimeout(() => {
-          input.removeAttribute('disabled')
-          input.classList.remove('delay-inputs-after-select')
-        }, 500)
+        if (window.innerWidth < 1279) {
+          // Делаю инпуты disabled на 0.5 секунд, иначе скачет клавиатура
+          input.setAttribute('disabled', 'disabled')
+          input.classList.add('delay-inputs-after-select')
+          setTimeout(() => {
+            input.removeAttribute('disabled')
+            input.classList.remove('delay-inputs-after-select')
+          }, 500)
+        }
 
         input.value = ''
         incorrectInputsError('remove')
@@ -944,3 +964,21 @@ updatePlaceholder()
 
 // Также вызывай функцию при изменении размеров окна
 window.addEventListener('resize', updatePlaceholder)
+
+// // Добавляем обработчик события focus к каждому инпуту
+// inputType.forEach(function (input) {
+//   console.log(input)
+//   input.addEventListener('focus', function () {
+//     // Прокручиваем страницу вверх на 100px (может потребоваться настройка)
+//     window.scrollTo(0, 100)
+//   })
+// })
+
+// formInput.forEach((input) => {
+//   if (input.nodeName === 'INPUT') {
+//     input.addEventListener('focus', function () {
+//       // Прокручиваем страницу вверх на 100px (может потребоваться настройка)
+//       sidebar.style.height = '95vh'
+//     })
+//   }
+// })

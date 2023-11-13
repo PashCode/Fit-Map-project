@@ -1,7 +1,7 @@
 #map
-    position: relative
     width: 100%
     height: 100%
+    transition: .5s
 
 .gm-style .gm-style-iw
     padding: 1.2rem !important
@@ -57,10 +57,10 @@ div.gm-bundled-control div.gmnoprint
 .info-window-style__purple
     position: absolute
     display: block
+    top: 0
+    left: 0
     width: .7rem
     height: 100%
-    left: 0
-    top: 0
     background-color: $color-label-workout-running
 
 .info-window-style__orange
@@ -75,3 +75,7 @@ div.gm-bundled-control div.gmnoprint
 .map-hidden
     position: relative
     z-index: -1
+
+.map-blur
+    filter: blur(1rem)
+    transition: 1s
