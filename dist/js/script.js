@@ -83,6 +83,12 @@ disclosureWorkoutsContainer.addEventListener('click', () => {
   disclosureWorkouts('toggle')
 })
 
+if (window.innerWidth <= 1279) {
+  form.addEventListener('dblclick', () => {
+    form.classList.add('hidden')
+  })
+}
+
 //-------------------------------------------------------------------------------------------------------------------
 
 // Функция для отображения карты
@@ -251,9 +257,6 @@ const clickedOnMap = (map) => {
 
       // Добавляю класс hidden, чтобы убрать форму
       form.classList.add('hidden')
-
-      // Убираю надпись про "нет тренировок в списке", если нужно
-      // trainingNothing.classList.remove('hidden-message-none-training')
     }
   }
 
@@ -315,9 +318,8 @@ const marker = new google.maps.Marker({
   // Инициализируем переменную для отслеживания состояния маркера
   let isOpen
   // Добавляем обработчик события клика на маркер
-  {
+  
     marker.addListener('click', () => {
-      focusOnHiddenElement.focus()
       // Если маркер закрыт, открываем его
       if (!isOpen) {
         infowindow.open(map, marker)
@@ -326,15 +328,17 @@ const marker = new google.maps.Marker({
         // Если маркер открыт, закрываем его
         infowindow.close()
         isOpen = false
+        focusOnHiddenElement.focus()
       }
     })
-  }
+  
 
   // Добавляем обработчик события закрытия информационного окна
   infowindow.addListener('closeclick', () => {
+
     isOpen = false // Устанавливаем флаг isOpen в false при закрытии окна
 
-    // При закрытии информационного окна, установить фокус на инпут, иначе фокус будет на метке и будет её обводить.
+    // // При закрытии информационного окна, установить фокус на инпут, иначе фокус будет на метке и будет её обводить.
     focusOnHiddenElement.focus()
   })
 }
@@ -423,7 +427,7 @@ const movingMapToMarker = () => {
         const newCenterLng = currentCenter.lng() - horizontalOffset // Высчитывание новых нужных мне координат центра карты
         const newCenterDesktop = new google.maps.LatLng(currentCenter.lat(), newCenterLng) // Создание новой LatLng позиции с кастомными координатами
 
-        const verticalOffset = 0.0045 // Смещение карты выше от дефолтного map.setCenter(markerPosition)
+        const verticalOffset = 0.006 // Смещение карты выше от дефолтного map.setCenter(markerPosition)
         const newCenterLat = currentCenter.lat() - verticalOffset // Высчитывание новых нужных мне координат центра карты
         const newCenterMobile = new google.maps.LatLng(newCenterLat, currentCenter.lng()) // Создание новой LatLng позиции с кастомными координатами
 
@@ -895,20 +899,36 @@ const instructionForNewUser = (map) => {
 
   // Проверяем, что элемент является input и заполнен.
   const checkInputs = (el) => el.nodeName === 'INPUT' && el.value !== ''
+
   // Функция для скрытия элемента
   const hideElement = (element) => element.classList.add('instruction-hidden')
+
   // Функция для отображения элемента
   const showElement = (element) => element.classList.remove('instruction-hidden')
-  //prettier-ignore
+
+  // Функция размытия ненужных элементов при прохождении инструкции для новичков
+  const blurElement = (element, state) => element.classList[state]('instruction-blur')
+
+  // Функция размытия и отключения клика ненужных элементов при прохождении инструкции для новичков
+  const blurAndNoClick = (element, state) => element.classList[state]('instruction-click-none')
+
+  // Проверка локального хранилища
   const localStorageEmpty = () => localStorage.getItem('visitedInstruction1/2') === null
 
   // Первая инструкция
   if (!localStorage.getItem('visitedInstruction1/2')) {
-    showElement(startWindow1)
+    setTimeout(() => showElement(startWindow1), 1000)
+    blurElement(sidebar, 'add')
+    blurAndNoClick(header, 'add')
+    disclosureWorkoutsContainer.style.background = 'transparent'
     map.addListener('click', () => {
       if (localStorageEmpty()) {
         hideElement(startWindow1)
         showElement(startWindow2)
+        blurElement(sidebar, 'remove')
+        blurElement(trainingNothing, 'add')
+        blurAndNoClick(mapElement, 'add')
+        blurAndNoClick(disclosureWorkoutsContainer, 'add')
       }
     })
 
@@ -921,7 +941,10 @@ const instructionForNewUser = (map) => {
           form.addEventListener('submit', () => {
             if (localStorageEmpty()) {
               hideElement(startWindow2)
-              showElement(startWindow3)
+              blurElement(sidebar, 'add')
+              blurAndNoClick(mapElement, 'remove')
+              blurAndNoClick(containerWorkouts, 'add')
+              setTimeout(() => showElement(startWindow3), 1000)
             }
             localStorage.setItem('visitedInstruction1/2', 'true')
           })
@@ -936,6 +959,12 @@ const instructionForNewUser = (map) => {
       arrOfMarkers.forEach((el) => {
         el.addListener('click', () => {
           hideElement(startWindow3)
+          blurElement(sidebar, 'remove')
+          blurElement(trainingNothing, 'remove')
+          blurAndNoClick(header, 'remove')
+          blurAndNoClick(containerWorkouts, 'remove')
+          blurAndNoClick(disclosureWorkoutsContainer, 'remove')
+          disclosureWorkoutsContainer.style.background = null
           localStorage.setItem('visitedInstruction2/2', 'true')
         })
       })
@@ -981,4 +1010,9 @@ window.addEventListener('resize', updatePlaceholder)
 //       sidebar.style.height = '95vh'
 //     })
 //   }
+// })
+
+// form.addEventListener('click', (e) => {
+//   form.classList.add('hidden')
+//   e.stopPropagation()
 // })
