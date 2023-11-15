@@ -49,6 +49,7 @@ const dataLocalStorage = JSON.parse(localStorage.getItem('myWorkouts'))
 const filterItemsUnderline = () => {
   sortCheckBox.addEventListener('click', (e) => {
     const checkboxes = sortCheckBox.querySelectorAll('.header__item-running, .header__item-cycling')
+    // const clearfilter = sortCheckBox.querySelector('.filter-item-focus')
 
     checkboxes.forEach((checkbox) => {
       checkbox.classList.remove('filter-item-focus')
@@ -56,6 +57,11 @@ const filterItemsUnderline = () => {
 
     if (e.target.innerText === 'Біг' || e.target.innerText === 'Велосипед') {
       e.target.classList.add('filter-item-focus')
+    }
+
+    if (e.target.innerText === 'Скинути фільтри') {
+      e.target.classList.add('filter-item-clear')
+      setTimeout(() => e.target.classList.remove('filter-item-clear'), 300)
     }
   })
 }
@@ -82,12 +88,6 @@ const disclosureWorkouts = (state) => {
 disclosureWorkoutsContainer.addEventListener('click', () => {
   disclosureWorkouts('toggle')
 })
-
-if (window.innerWidth <= 1279) {
-  form.addEventListener('dblclick', () => {
-    form.classList.add('hidden')
-  })
-}
 
 //-------------------------------------------------------------------------------------------------------------------
 
@@ -206,11 +206,6 @@ const clickedOnMap = (map) => {
       lng: e.latLng.lng(),
     }
 
-    // // Если кликнул на карту и в локальном хранилище нет тренировок, то при клике убрать надпись "нет тренировок в списке"
-    // if (clickedPosition && !dataLocalStorage.length) {
-    //   trainingNothing.classList.add('hidden-message-none-training')
-    // }
-
     // Если метка при клике уже существует, удаляем ее
     deleteMarkIfVisible()
 
@@ -227,6 +222,13 @@ const clickedOnMap = (map) => {
         strokeColor: 'white', // Цвет границы
       },
     })
+
+    if (window.innerWidth <= 1279) {
+      form.addEventListener('dblclick', () => {
+        form.classList.add('hidden')
+        deleteMarkIfVisible()
+      })
+    }
 
     // Удаляем класс hidden при клике на карту, чтобы отобразить форму
     form.classList.remove('hidden')
@@ -747,33 +749,28 @@ const app = new App()
 //--------------------------------------------------------------------------------------------------------------------------------------
 // ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃ VALIDATE ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
 //--------------------------------------------------------------------------------------------------------------------------------------
-// Валидация. Можно вписывать 1-9 и одну точку между ними.
+// Можно вписывать 1-9 и одну точку между ними или запятую, которая заменится на точку.
 function validateInputs() {
   formInput.forEach((el) => {
-    el.addEventListener('input', (e) => {
-      // Получаем значение элемента
-      const value = el.value
-
-      // Проверяем, что элемент является <input>.
+    el.addEventListener('input', () => {
       if (el.nodeName === 'INPUT') {
+        let value = el.value
+
         // Заменяем все запятые на точки, кроме первой
-        const sanitizedValue = value.replace(/[^0-9,.]/g, '').replace(/,/, '.')
+        value = value
+          .replace(/[^0-9,.]/g, '')
+          .replace(/^,/, '')
+          .replace(/,/, '.')
 
-        const parts = sanitizedValue.split('.')
+        // Регулярное выражение для валидации формата числа
+        const regex = /^(0\.)?[1-9][0-9]*(\.[0-9]*)?$/
 
-        if ((parts.length === 1 && (e.data === '.' || e.data === ',')) || (parts.length > 1 && parts[0] === '')) {
-          // Если введена точка или запятая в начале или после числа с уже имеющейся точкой или запятой, отменяем ввод
-          el.value = parts[1] ? '0.' + parts[1] : '' // Если после 0 есть другие цифры, разрешаем только 0. и далее
-        } else if (parts.length > 2 || (parts.length === 2 && (e.data === '.' || e.data === ','))) {
-          // Если есть более одной точки или запятой или попытка ввести точку или запятую после числа и точка или запятая уже есть, отменяем ввод
-          el.value = parts[0] + '.' + parts.slice(1).join('')
+        if (!regex.test(value)) {
+          // Если формат числа неверный, удаляем последний введенный символ
+          el.value = value.slice(0, -1)
         } else {
-          // Проверяем, чтобы 0 не стояло в начале значения, за исключением случая 0 после точки или запятой
-          if ((parts[0] === '0' && parts[1] !== '0') || (parts[0] === '0' && e.data !== '.' && e.data !== ',')) {
-            el.value = parts[1] ? '0.' + parts[1] : '' // Если после 0 есть другие цифры, разрешаем только 0. и далее
-          } else {
-            el.value = sanitizedValue
-          }
+          // Если формат числа верный, устанавливаем отформатированное значение
+          el.value = value
         }
       }
     })
@@ -786,12 +783,11 @@ validateInputs()
 //-------------------------------------------------------------------------------------------------------------------
 
 // Функция для обработки отправки формы
-const handleFormSubmit = (e) => {
-  e.preventDefault()
+const handleFormSubmit = () => {
   let hasEmptyInput = false
 
   formInput.forEach((input) => {
-    if (input.value === '' && !input.parentElement.classList.contains('form__row--hidden')) {
+    if (input.nodeName === 'INPUT' && input.value === '' && !input.parentElement.classList.contains('form__row--hidden')) {
       hasEmptyInput = true
       markInvalidInput(input)
       input.focus()
@@ -807,6 +803,8 @@ const handleFormSubmit = (e) => {
 
     bouncingMark.setMap(null)
   }
+
+  return !hasEmptyInput
 }
 //-------------------------------------------------------------------------------------------------------------------
 
@@ -889,7 +887,7 @@ const changeInput = () => {
 changeInput()
 
 // Вызываем обработчик отправки формы
-form.addEventListener('submit', handleFormSubmit)
+// form.addEventListener('submit', handleFormSubmit)
 
 // INSTRUCTION FOR NEW USERS
 const instructionForNewUser = (map) => {
@@ -898,7 +896,7 @@ const instructionForNewUser = (map) => {
   const startWindow3 = document.querySelector('.start-instruction-window-3')
 
   // Проверяем, что элемент является input и заполнен.
-  const checkInputs = (el) => el.nodeName === 'INPUT' && el.value !== ''
+  // const checkInputs = (el) => el.nodeName === 'INPUT' && el.value !== ''
 
   // Функция для скрытия элемента
   const hideElement = (element) => element.classList.add('instruction-hidden')
@@ -918,40 +916,34 @@ const instructionForNewUser = (map) => {
   // Первая инструкция
   if (!localStorage.getItem('visitedInstruction1/2')) {
     setTimeout(() => showElement(startWindow1), 1000)
-    blurElement(sidebar, 'add')
-    blurAndNoClick(header, 'add')
+    blurElement(trainingNothing, 'add')
+    blurAndNoClick(disclosureWorkoutsContainer, 'add')
+    blurAndNoClick(sortButton, 'add')
+    blurAndNoClick(logo, 'add')
     disclosureWorkoutsContainer.style.background = 'transparent'
     map.addListener('click', () => {
       if (localStorageEmpty()) {
         hideElement(startWindow1)
         showElement(startWindow2)
-        blurElement(sidebar, 'remove')
-        blurElement(trainingNothing, 'add')
         blurAndNoClick(mapElement, 'add')
-        blurAndNoClick(disclosureWorkoutsContainer, 'add')
       }
     })
-
-    // Вторая инструкция
-    formInput.forEach((el) => {
-      el.addEventListener('input', (e) => {
-        e.preventDefault()
-        // Проверяем, что элемент является <input> и заполнен.
-        if (checkInputs(el)) {
-          form.addEventListener('submit', () => {
-            if (localStorageEmpty()) {
-              hideElement(startWindow2)
-              blurElement(sidebar, 'add')
-              blurAndNoClick(mapElement, 'remove')
-              blurAndNoClick(containerWorkouts, 'add')
-              setTimeout(() => showElement(startWindow3), 1000)
-            }
-            localStorage.setItem('visitedInstruction1/2', 'true')
-          })
-        }
-      })
-    })
   }
+
+  // Вторая инструкция
+  form.addEventListener('submit', () => {
+    if (localStorageEmpty() && handleFormSubmit()) {
+      hideElement(startWindow2)
+      blurAndNoClick(mapElement, 'remove')
+      blurAndNoClick(containerWorkouts, 'add')
+      setTimeout(() => showElement(startWindow3), 1000)
+      localStorage.setItem('visitedInstruction1/2', 'true')
+    } else {
+      handleFormSubmit()
+    }
+  })
+
+  // if (!localStorageEmpty() && !handleFormSubmit())
 
   // Третья инструкция
   if (!localStorage.getItem('visitedInstruction2/2')) {
@@ -959,9 +951,9 @@ const instructionForNewUser = (map) => {
       arrOfMarkers.forEach((el) => {
         el.addListener('click', () => {
           hideElement(startWindow3)
-          blurElement(sidebar, 'remove')
           blurElement(trainingNothing, 'remove')
-          blurAndNoClick(header, 'remove')
+          blurAndNoClick(sortButton, 'remove')
+          blurAndNoClick(logo, 'remove')
           blurAndNoClick(containerWorkouts, 'remove')
           blurAndNoClick(disclosureWorkoutsContainer, 'remove')
           disclosureWorkoutsContainer.style.background = null

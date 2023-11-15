@@ -70,7 +70,7 @@
             transform: translateY(.2rem) rotate(90deg)
     &__checkbox-wrap
         display: none
-        column-gap: 2rem
+        // column-gap: 2rem
     &__item-running,
     &__item-cycling,
     &__item-clear
@@ -79,8 +79,18 @@
         font-size: 1.4rem
         color: $color-grey-light
         transition: .3s
+        padding: 1rem 1.3rem 1rem 1.3rem
+        @include respond(big-tablet)
+            padding: 1rem 1.5rem 1rem 1.5rem
+        @include respond(small-tablet)
+            padding: 1rem 1.35rem 1rem 1.35rem
+        @include respond(small-phone)
+            padding: .3rem 4rem .3rem 4rem
+        @include respond(medium-small-phone)
+            padding: .3rem 2.5rem .3rem 2.5rem
         &:hover
             color: $color-white
+
     &__sort-line
         position: relative
         height: 2rem
@@ -107,7 +117,7 @@
     justify-content: space-around
     @include respond(big-tablet)
         justify-content: space-evenly
-        width: 80%
+        width: 85%
     @include respond(small-tablet)
         width: 100%
 
@@ -121,12 +131,15 @@
         border-top: 1px solid $color-grey-light
         border-radius: 1rem 1rem 0 0
         padding: 1rem
-        column-gap: 6rem
+        // column-gap: 6rem
         justify-content: center
         width: 98%
         margin-bottom: 1rem
 
 .filter-item-focus
-    transform: translateY(-.2rem) scale(1.2)
+    transform: translateY(-.1rem) scale(1.25)
     font-weight: 500
     color: inherit
+
+.filter-item-clear
+    animation: item-clear .3s
