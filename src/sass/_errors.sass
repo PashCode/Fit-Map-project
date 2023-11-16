@@ -8,6 +8,7 @@
         display: flex
         align-items: center
         justify-content: center
+        padding: 0 1rem 0 1rem
     &__icon-wrap
         display: flex
         justify-content: center
@@ -26,8 +27,10 @@
         font-size: 2rem
         background: $color-grey-light
         border-radius: .5rem
-        text-align: center
+        text-align: start
         padding: .5rem
+        @include respond(small-tablet)
+            font-size: 1.65rem
 
 .error-code-unexpected
     height: 0

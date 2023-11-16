@@ -11,8 +11,13 @@
     text-shadow: .2rem .2rem .1rem $color-black
     height: 9.25rem
     transition: .5s ease-out
+    margin-top: 1.7rem
+    @include respond(big-tablet)
+        margin-top: 6rem
     @include respond(phone)
         border: .15rem solid $color-borders
+    @include respond(small-phone)
+        margin-top: 0
     &__row
         display: flex
         align-items: center
