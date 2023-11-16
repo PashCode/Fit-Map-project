@@ -1,0 +1,56 @@
+// Анімація тремтіння незаповнених інпутів
+@keyframes shake-invalid-inputs
+    0%
+        -webkit-transform: translate(0)
+        transform: translate(0)
+    20%
+        -webkit-transform: translate(-.2rem, .2rem)
+        transform: translate(-.2rem, .2rem)
+    40%
+        -webkit-transform: translate(-.2rem, -.2rem)
+        transform: translate(-.2rem, -.2rem)
+    60%
+        -webkit-transform: translate(.2rem, .2rem)
+        transform: translate(.2rem, .2rem)
+    80%
+        -webkit-transform: translate(.2rem, -.2rem)
+        transform: translate(.2rem, -.2rem)
+    100%
+        -webkit-transform: translate(0)
+        transform: translate(0)
+
+// Повідомлення про незаповнені інпути для компьютерів
+@keyframes show-error-message
+    0%
+        opacity: 0
+    100%
+        opacity: 1
+        transform: translateY(6rem)
+
+// Повідомлення про незаповнені інпути для планшетів
+@keyframes show-error-message-tablet
+    0%
+        opacity: 0
+    100%
+        opacity: 1
+        transform: translateY(8.5rem)
+
+// Повідомлення про незаповнені інпути для мобільних
+@keyframes show-error-message-phone
+    0%
+        opacity: 0
+    100%
+        opacity: 1
+        transform: translateY(0rem)
+
+@keyframes animate-filter-clear
+    0%
+        transform: scale(1)
+    50%
+        transform: scale(.85)
+    100%
+        transform: scale(1)
+
+// Порожній елемент для фокусу в JS
+.hidden-focus
+    opacity: 0

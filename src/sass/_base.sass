@@ -1,3 +1,4 @@
+// Кольорові змінні
 $color-white: white
 $color-black: black
 $color-grey-light: #d3d3d3
@@ -18,6 +19,7 @@ $color-label-workout-cycling: #e1bb89
 $color-label-workout-running: #be99e7
 
 $select-arrow-icon: url(../icons/arrow-select.svg)
+//---------------------------------------------------------------------------------
 
 *, ::after, ::before
     margin: 0
@@ -34,32 +36,33 @@ a:link, a:visited
 
 button:focus
     outline: none
+//---------------------------------------------------------------------------------
 
-// Media queries / Медіа запроси
+// Медіа запроси
 @mixin respond($breakpoint)
     @if $breakpoint == very-small-phone
-        @media (max-width: 340px) // 375px -- 320px
+        @media (max-width: 340px) // 340px -- 320px
             @content
     @if $breakpoint == medium-small-phone
-        @media (max-width: 410px) // 375px -- 320px
+        @media (max-width: 410px) // 410px -- 340px
             @content
     @if $breakpoint == small-phone
-        @media (max-width: 435px) // 375px -- 320px
+        @media (max-width: 435px) // 435px -- 410px
             @content
     @if $breakpoint == phone
-        @media (max-width: 475px) // 375px -- 320px
+        @media (max-width: 475px) // 475px -- 435px
             @content
     @if $breakpoint == big-phone
-        @media (max-width: 561px) // 450px -- 376px
+        @media (max-width: 561px) // 561px -- 475px
             @content
     @if $breakpoint == small-tablet
-        @media (max-width: 670px) // 650px -- 451px
+        @media (max-width: 670px) // 670px -- 561px
             @content
     @if $breakpoint == tablet
-        @media (max-width: 900px) // 850px -- 651px
+        @media (max-width: 900px) // 900px -- 670px
             @content
     @if $breakpoint == big-tablet
-        @media (max-width: 1279px) // 1279px -- 850px
+        @media (max-width: 1279px) // 1279px -- 900px
             @content
     @if $breakpoint == small-desktop
         @media (max-width: 1350px) // 1350px -- 1279px
@@ -68,8 +71,9 @@ button:focus
         @media (max-width: 1420px) // 1420px -- 1350px
             @content
     @if $breakpoint == big-desktop
-        @media (max-width: 1515px) // 1515px -- wider
+        @media (max-width: 1515px) // 1515px -- і ширше
             @content
+//---------------------------------------------------------------------------------
 
 html
     position: relative
@@ -97,7 +101,6 @@ html
     @include respond(very-small-phone)
         font-size: 45%
 body
-    position: relative
     color: $color-white
     line-height: 1.6
     overscroll-behavior-y: none
@@ -110,61 +113,3 @@ body
     @include respond(big-tablet)
         align-items: flex-end
         justify-content: center
-        overflow: hidden
-@keyframes shake
-    0%
-        -webkit-transform: translate(0)
-        transform: translate(0)
-
-    20%
-        -webkit-transform: translate(-.2rem, .2rem)
-        transform: translate(-.2rem, .2rem)
-
-    40%
-        -webkit-transform: translate(-.2rem, -.2rem)
-        transform: translate(-.2rem, -.2rem)
-
-    60%
-        -webkit-transform: translate(.2rem, .2rem)
-        transform: translate(.2rem, .2rem)
-
-    80%
-        -webkit-transform: translate(.2rem, -.2rem)
-        transform: translate(.2rem, -.2rem)
-
-    100%
-        -webkit-transform: translate(0)
-        transform: translate(0)
-
-@keyframes show-error-message
-    0%
-        opacity: 0
-    100%
-        opacity: 1
-        transform: translateY(6rem)
-
-@keyframes show-error-message-tablet
-    0%
-        opacity: 0
-    100%
-        opacity: 1
-        transform: translateY(8.5rem)
-
-@keyframes show-error-message-phone
-    0%
-        opacity: 0
-    100%
-        opacity: 1
-        transform: translateY(0rem)
-
-@keyframes item-clear
-    0%
-        transform: scale(1)
-    50%
-        transform: scale(.85)
-    100%
-        transform: scale(1)
-// // 62.5% = 10px font size / 62.5% = розміру шрифту в 10px
-
-.hidden-focus
-    opacity: 0

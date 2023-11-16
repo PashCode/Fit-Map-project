@@ -1,29 +1,27 @@
-.form
+.form // Форма вводу
     position: relative
     background: $color-form
     border: .1rem solid $color-borders
     border-radius: .5rem
     padding: 1.5rem 4.75rem 1.5rem 1.5rem
     margin-bottom: 1.75rem
+    color: $color-grey-light
     display: grid
     grid-template-columns: 1fr 1fr
     gap: .5rem 2.5rem
-    text-shadow: .2rem .2rem .1rem $color-black
     height: 9.25rem
     transition: .5s ease-out
     margin-top: 1.7rem
     @include respond(big-tablet)
-        margin-top: 6rem
+        margin-top: 0
     @include respond(phone)
         border: .15rem solid $color-borders
-    @include respond(small-phone)
-        margin-top: 0
-    &__row
+    &__row // Кожна обгортка інпуту
         display: flex
         align-items: center
-    &__row--hidden
+    &__row_hidden // Схований п'ятий інпут
         display: none
-    &__label
+    &__label // Назва інпуту [Тривалість, дистанція і т.п.]
         flex: 0 0 40%
         font-size: 1.4rem
         @include respond(big-tablet)
@@ -35,7 +33,7 @@
             flex: 0 0 50%
         @include respond(very-small-phone)
             flex: 0 0 55%
-    &__input
+    &__input // Кожний інпут
         width: 50%
         padding: .3rem .65rem
         font-size: 1.4rem
@@ -47,9 +45,8 @@
         box-shadow: inset .2rem .5rem 1rem $color-shadows
         transition: .3s
         &:focus
-            outline: none
             background-color: $color-white
-        &--type
+        &_type // Вибір типу тренування
             -webkit-appearance: none
             -moz-appearance: none
             appearance: unset
@@ -64,28 +61,13 @@
                 background-color: $color-grey-light
                 border: none
 
-.invalid-input-text-color::placeholder, .invalid-input-text-color
-    color: $color-white
-
-// .correct-input-text-color::placeholder
-//     color: $color-text-inputs
-
-.invalid-animation-input
-    animation: shake .2s linear both
-
-.invalid-input-background-color, .invalid-input-background-color:focus
-    background: $color-errors
-
-.delay-inputs-after-select
-    background: $color-text-inputs
-
-.btn-wrap
+.btn-wrap // Обгортка для кнопка відправки форми
     position: absolute
     display: flex
     align-self: center
     right: 0
     height: 100%
-    &__button
+    &__button // Кнопка відправки форми
         display: flex
         justify-content: center
         align-items: center
@@ -99,19 +81,15 @@
         transition: .2s
         @include respond(phone)
             border-left: .15rem solid $color-borders
-    &__icons
+    &__icon // Стрілочка всередині кнопки
         width: 4rem
         transition: .2s
-    &__button:hover &__icons
+    &__button:hover &__icon // При наведенні на кнопку вона рухається
         transform: translateX(.4rem)
         @include respond(tablet)
             transform: none
 
-.btn-img
-    width: 3rem
-    transition: .2s
-
-.form.hidden
+.form.hidden // Доп. класс для приховування форми
     transform: translateY(-30rem)
     height: 0
     padding: 0rem 4.75rem 0rem 1.5rem
@@ -119,5 +97,17 @@
     opacity: 0
     transition: all .5s ease-in
 
-.form-scroll-top
+.invalid-input-text-color::placeholder, .invalid-input-text-color // Колір шрифту інпуту коли він неправильно заповненний
+    color: $color-white
+
+.invalid-animation-input // Анімація неправильно заповненного інпуту
+    animation: shake-invalid-inputs .2s linear both
+
+.invalid-input-background-color, .invalid-input-background-color:focus // Червоний фон неправильно заповненного інпуту
+    background: $color-errors
+
+.delay-inputs-after-select // Змінюю колір інпутів після переключання типу тренувань, щоб не скакала клавіатура
+    background: $color-text-inputs
+
+.form-scroll-top // Якщо контейнер з тренуваннями у самому низу, то підняти його наверх
     top: 0

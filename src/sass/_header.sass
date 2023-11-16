@@ -1,14 +1,15 @@
-.header
+.header // Хедер
     position: relative
     display: flex
     justify-content: center
     align-items: center
     width: 100%
-    flex-direction: column
-    // margin-bottom: 4rem
     @include respond(big-tablet)
-        // margin-bottom: 6rem
-    &__icons-and-title-wrap
+        margin-bottom: 6rem
+    @include respond(small-phone)
+        flex-direction: column
+        margin-bottom: 0
+    &__icon-and-title-wrap // Іконка і назва додатку
         display: flex
         align-items: center
         margin-bottom: 5rem
@@ -17,23 +18,20 @@
             margin-bottom: 1rem
         @include respond(small-phone)
             margin-bottom: 0
-    &__icon-title
+    &__icon-title // Іконка додатку
         height: 3rem
-        display: flex
         margin-right: .5rem
-    &__title
-        align-self: center
+    &__title // Назва додатку [Заголовок]
         font-size: 3.5rem
         font-weight: 600
         color: $color-grey-light
-    &__sort-wrap
+
+    &__filter-wrap // Обгортка для всього фільтру, включаючи його айтеми
         display: flex
         position: absolute
         justify-content: center
-        align-content: center
         width: 100%
-        margin-top: 4rem
-        margin-bottom: -.5rem
+        margin-top: 4.5rem
         z-index: 1
         @include respond(big-tablet)
             margin-top: 9rem
@@ -43,13 +41,13 @@
             margin-top: 0
             flex-direction: column
             align-items: center
-    &__icons-and-text-wrap
+    &__icon-and-text-wrap // Обгортка фільтру
         display: flex
         align-items: center
         @include respond(small-phone)
             flex-direction: column
             width: 15rem
-    &__sort-text
+    &__filter-text // Надпис "Фільтрувати"
         font-size: 1.4rem
         color: $color-grey-light
         font-weight: 500
@@ -61,25 +59,23 @@
             position: absolute
             height: 4rem
             z-index: 1
-
         &:hover
             color: $color-white
-    &__icon-sort
+    &__filter-icon // Стрілочка фільтру
         width: 1.1rem
         transition: .3s
         @include respond(small-phone)
             transform: rotate(90deg)
             height: 5rem
-    &__sort-text:hover + .header__icon-sort
+    &__filter-text:hover + .header__filter-icon // При наведенні на слово "Фільтрувати", рухати іконку стрілочки
         transform: translateX(.2rem)
         @include respond(small-phone)
             transform: translateY(.2rem) rotate(90deg)
-    &__checkbox-wrap
+    &__checkbox-wrap // Якщо фільтр не відкритий, то його не видно
         display: none
-        // column-gap: 2rem
     &__item-running,
     &__item-cycling,
-    &__item-clear
+    &__item-clear // Типи тренування і скидання фільтру
         text-align: center
         cursor: pointer
         font-size: 1.4rem
@@ -96,19 +92,19 @@
             padding: .3rem 2.5rem .3rem 2.5rem
         &:hover
             color: $color-white
-
-    &__sort-line
+    &__sort-line // Полоски між типами фільтру
         position: relative
         height: 2rem
         display: flex
         @include respond(small-phone)
             display: none
-    &__error-input-message-wrap
+
+    &__error-input-message-wrap // Обгортка для напису про незаповнені інпути
         display: none
         position: absolute
         transform: translateY(10rem)
         animation: .3s show-error-message forwards
-        font-size: 1.5rem
+        font-size: 1.4rem
         color: $color-errors
         @include respond(big-tablet)
             animation: .3s show-error-message-tablet forwards
@@ -116,37 +112,34 @@
             position: relative
             animation: .3s show-error-message-phone forwards
 
-.visible-input-error
-    display: block
-
-.header-sort-active
+.header-filter-active // Стилі відкритого фільтру
     justify-content: space-around
-    // position: absolute
     @include respond(big-tablet)
         justify-content: space-evenly
         width: 85%
     @include respond(small-tablet)
         width: 100%
 
-.checkbox-wrap-visible
+.checkbox-wrap-visible // Стилі кожного айтема у відкритому фільтрі
     display: flex
     align-items: center
     margin-left: 5rem
     @include respond(small-phone)
-        // position: relative
         margin-left: 0
         border-top: 1px solid $color-grey-light
         border-radius: 1rem 1rem 0 0
         padding: 1rem
-        // column-gap: 6rem
         justify-content: center
         width: 98%
         margin-bottom: 1rem
 
-.filter-item-focus
+.visible-input-error // Якщо потрібно показати помилку про незаповнені інпути
+    display: block
+
+.filter-item-focus // При натисканні на айтем фільтру апскйлити його
     transform: translateY(-.1rem) scale(1.25)
     font-weight: 500
     color: inherit
 
-.filter-item-clear
-    animation: item-clear .3s
+.filter-item-clear // При настисканні на "Скинути фільтри" анімувати його
+    animation: animate-filter-clear .3s

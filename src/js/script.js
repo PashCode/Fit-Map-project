@@ -5,21 +5,21 @@ const containerWorkouts = document.querySelector('.workouts') // Контейн�
 
 const form = document.querySelector('.form') // Форма вводу
 const formInput = document.querySelectorAll('.form__input') // Кожний інпут форми вводу
-const inputType = document.querySelector('.form__input--type') // Вибір тренування, біг чи велосипед
-const inputDistance = document.querySelector('.form__input--distance') // Дистанція
-const inputDuration = document.querySelector('.form__input--duration') // Тривалість
-const inputCadence = document.querySelector('.form__input--cadence') // Темп
-const inputPulse = document.querySelector('.form__input--pulse') // Пульс
+const inputType = document.querySelector('.form__input_type') // Вибір тренування, біг чи велосипед
+const inputDistance = document.querySelector('.form__input_distance') // Дистанція
+const inputDuration = document.querySelector('.form__input_duration') // Тривалість
+const inputCadence = document.querySelector('.form__input_cadence') // Темп
+const inputPulse = document.querySelector('.form__input_pulse') // Пульс
 
 const sidebar = document.querySelector('.sidebar') // Сайдбар
 const header = document.querySelector('.header') // Хедер
 const errorMessage = document.querySelector('.header__error-input-message-wrap') // Повідомлення про незаповнену форму
-const sortButton = document.querySelector('.header__sort-wrap') // Напис "Фільтрувати"
+const sortButton = document.querySelector('.header__filter-wrap') // Напис "Фільтрувати"
 const sortCheckBox = document.querySelector('.header__checkbox-wrap') // Контейнер з фільтрами тренувань та скиданням фільтрів
-const logo = document.querySelector('.header__icons-and-title-wrap') // Контейнер логотипу і напису "FitMap"
-const emptyTrainingList = document.querySelector('.sidebar__training-none-wrap') // Напис про порожній список тренувань
+const logo = document.querySelector('.header__icon-and-title-wrap') // Контейнер логотипу і напису "FitMap"
+const emptyTrainingList = document.querySelector('.sidebar__empty-training-list-wrap') // Напис про порожній список тренувань
 const disclosureWorkoutsContainer = document.querySelector('.sidebar__disclosure-training') // Контейнер розгортання/згортання сайдбару для моб.
-const disclosureArrow = document.querySelector('.sidebar__arrow-icons') // Стрілка всередині контейнера для розгортання/згортання
+const disclosureArrow = document.querySelector('.sidebar__arrow-icon') // Стрілка всередині контейнера для розгортання/згортання
 
 const focusOnHiddenElement = document.querySelector('.hidden-focus') // Порожній елемент для фокусування
 //---------------------------------------------------------------------------------
@@ -437,7 +437,7 @@ class TrainingComponents {
     </div>
   
     <div class="workout__details">
-    <span class="workout__icon">💨</span>
+    <span class="workout__icon">⚡</span>
     <span class="workout__value">${
       inputType.value === 'running'
         ? (inputDuration.value / inputDistance.value).toFixed(2).replace('.', ':')
@@ -501,9 +501,9 @@ class App {
     this.sortTraining = this.sortTraining.bind(this)
     // Об'єкт з функціями, які спрацьовують в залежності від обраного фільтру.
     const actionMap = {
-      'header__sort-text': () => {
+      'header__filter-text': () => {
         // При натисканні на слово "Фільтрувати" він розкривається, чи навпаки
-        sortButton.classList.toggle('header-sort-active')
+        sortButton.classList.toggle('header-filter-active')
         sortCheckBox.classList.toggle('checkbox-wrap-visible')
       },
       'header__item-running': () => this.sortTraining('running'), // Сортування за типом "Біг"
@@ -696,7 +696,7 @@ const handleFormSubmit = () => {
 
   // Перевірка наявності пустих полів вводу
   formInput.forEach((input) => {
-    if (input.nodeName === 'INPUT' && input.value === '' && !input.parentElement.classList.contains('form__row--hidden')) {
+    if (input.nodeName === 'INPUT' && input.value === '' && !input.parentElement.classList.contains('form__row_hidden')) {
       hasEmptyInput = true // Змінюю флаг на true, тому що якийсь інпут
       markInvalidInput(input) // Позначення невалідного поля вводу
       input.focus() // Фокусування на першому пустому полі вводу
@@ -737,9 +737,9 @@ const resetInputStyles = (input) => {
 const controlFormRowVisibility = () => {
   const formRows = document.querySelectorAll('.form__row') // Знайти всі елементи з класом form__row
 
-  // Пройтися по всіх елементах, починаючи з п'ятого [індекс 4] і додати/видалити клас form__row--hidden
+  // Пройтися по всіх елементах, починаючи з п'ятого [індекс 4] і додати/видалити клас form__row_hidden
   formRows.forEach((row, index) => {
-    row.classList.toggle('form__row--hidden', index >= 4)
+    row.classList.toggle('form__row_hidden', index >= 4)
   })
 } //---------------------------------------------------------------------------------
 
@@ -785,8 +785,8 @@ const changeInput = () => {
     // Визначає, які інпути показати та приховати в залежності від обраного типу тренувань
     const { show, hide } = changeInputs[e.target.value] || { show: inputPulse, hide: inputCadence }
 
-    show.parentNode.classList.remove('form__row--hidden') // Показує вибраний інпут, знімаючи прихований клас [якщо він був прихований раніше]
-    hide.parentNode.classList.add('form__row--hidden') // Приховує необраний інпут, додаючи клас
+    show.parentNode.classList.remove('form__row_hidden') // Показує вибраний інпут, знімаючи прихований клас [якщо він був прихований раніше]
+    hide.parentNode.classList.add('form__row_hidden') // Приховує необраний інпут, додаючи клас
   })
 }
 changeInput() // Викликаємо функцію для зміни введень з метрів на пульс і навпаки

@@ -15,6 +15,7 @@
     justify-content: flex-start
     z-index: 100
     transition: .7s ease-in-out
+    overscroll-behavior-y: none
     @include respond(big-tablet)
         justify-content: center
         height: 55vh
@@ -55,7 +56,7 @@
             border-top-left-radius: 1.5rem
             border-top-right-radius: 1.5rem
             border-bottom-left-radius: 0
-    &__training-none-wrap
+    &__empty-training-list-wrap
         position: absolute
         display: flex
         justify-content: center
@@ -63,7 +64,7 @@
         top: 50%
         @include respond(big-tablet)
             top: 65%
-    &__training-none-text
+    &__empty-training-list-text
         display: flex
         align-items: center
         justify-content: center
@@ -96,7 +97,7 @@
             transition: 1s
             box-shadow: inset .2rem .5rem 1rem $color-shadows
             z-index: 1
-    &__arrow-icons
+    &__arrow-icon
         display: none
         @include respond(big-tablet)
             display: block
