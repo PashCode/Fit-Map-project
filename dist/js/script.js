@@ -14,8 +14,8 @@ const inputPulse = document.querySelector('.form__input_pulse') // Пульс
 const sidebar = document.querySelector('.sidebar') // Сайдбар
 const header = document.querySelector('.header') // Хедер
 const errorMessage = document.querySelector('.header__error-input-message-wrap') // Повідомлення про незаповнену форму
-const sortButton = document.querySelector('.header__filter-wrap') // Напис "Фільтрувати"
-const sortCheckBox = document.querySelector('.header__checkbox-wrap') // Контейнер з фільтрами тренувань та скиданням фільтрів
+const filterButton = document.querySelector('.header__filter-wrap') // Напис "Фільтрувати"
+const filterCheckBox = document.querySelector('.header__checkbox-wrap') // Контейнер з фільтрами тренувань та скиданням фільтрів
 const logo = document.querySelector('.header__icon-and-title-wrap') // Контейнер логотипу і напису "FitMap"
 const emptyTrainingList = document.querySelector('.sidebar__empty-training-list-wrap') // Напис про порожній список тренувань
 const disclosureWorkoutsContainer = document.querySelector('.sidebar__disclosure-training') // Контейнер розгортання/згортання сайдбару для моб.
@@ -380,7 +380,7 @@ const movingMapToMarker = () => {
     map.panTo(currentPosition, 500)
   })
 }
-movingMapToMarker()
+movingMapToMarker() // Викликаю функцію переміщення мапи на маркер
 //---------------------------------------------------------------------------------
 
 //prettier-ignore
@@ -391,6 +391,8 @@ const months = [
 
 class TrainingComponents {
   constructor() {
+    const removeLastDot = (value) => value.toString().replace(/\.$/, '') // Функція для видалення останньої крапки у вписаному показнику
+
     const currentDate = new Date() // Отримання поточної дати та часу
 
     // Кінцева дата та час тренування
@@ -409,11 +411,11 @@ class TrainingComponents {
 
     // HTML-код для вставки тренування
     this.insertTypeHtml = `<li class="workout ${
-      inputType.value === 'running' ? 'workout--running' : 'workout--cycling'
+      inputType.value === 'running' ? 'workout_running' : 'workout_cycling'
     }" data-workout-id="${this.trainingId}">
   
     <div class="workout__delete-wrap">
-    <img class="workout__delete-icon" src="icons/cross.svg" alt="Видалити тренування" />
+    <img class="workout__delete-icon" src="icons/delete-workout-cross.svg" alt="Видалити тренування" />
   </div>
   
     <div class="workout__title-wrap">
@@ -426,7 +428,7 @@ class TrainingComponents {
   
     <div class="workout__details">
     <span class="workout__icon">${inputType.value === 'running' ? '🏃🏻' : '🚴🏻'}</span>
-    <span class="workout__value">${inputDistance.value}</span>
+    <span class="workout__value">${removeLastDot(inputDistance.value)}</span>
     <span class="workout__unit">км</span>
     </div>
   
@@ -448,7 +450,9 @@ class TrainingComponents {
   
     <div class="workout__details">
     <span class="workout__icon">${inputType.value === 'running' ? '🦶🏼' : '🖤'}</span>
-    <span class="workout__value">${inputType.value === 'running' ? inputCadence.value : inputPulse.value}</span>
+    <span class="workout__value">${
+      inputType.value === 'running' ? removeLastDot(inputCadence.value) : removeLastDot(inputPulse.value)
+    }</span>
     <span class="workout__unit">${inputType.value === 'running' ? 'кроків' : 'уд/хв'}</span>
     </li>`
   }
@@ -497,17 +501,17 @@ class App {
       }
     }) //---------------------------------------------------------------------------------
 
-    // Прив'язка методу sortTraining до поточного екземпляру та виклик його при сортуванні тренувань
-    this.sortTraining = this.sortTraining.bind(this)
+    // Прив'язка методу filterTraining до поточного екземпляру та виклик його при фільтрації тренувань
+    this.filterTraining = this.filterTraining.bind(this)
     // Об'єкт з функціями, які спрацьовують в залежності від обраного фільтру.
     const actionMap = {
       'header__filter-text': () => {
         // При натисканні на слово "Фільтрувати" він розкривається, чи навпаки
-        sortButton.classList.toggle('header-filter-active')
-        sortCheckBox.classList.toggle('checkbox-wrap-visible')
+        filterButton.classList.toggle('header-filter-active')
+        filterCheckBox.classList.toggle('checkbox-wrap-visible')
       },
-      'header__item-running': () => this.sortTraining('running'), // Сортування за типом "Біг"
-      'header__item-cycling': () => this.sortTraining('cycling'), // Сортування за типом "Велосипед"
+      'header__item-running': () => this.filterTraining('running'), // Фільтрація за типом "Біг"
+      'header__item-cycling': () => this.filterTraining('cycling'), // Фільтрація за типом "Велосипед"
       'header__item-clear': () => this.restoreTraining(), // Скидання всіх фільтрів
     }
 
@@ -528,8 +532,8 @@ class App {
   // Визначає, чи є тренування в масиві this.workouts та відображає або приховує повідомлення про порожній список тренувань
   availableTraining() {
     !this.workouts.length // Перевірка, чи довжина масиву workouts дорівнює 0
-      ? emptyTrainingList.classList.remove('hidden-training') // Відображення повідомлення, якщо масив порожній
-      : emptyTrainingList.classList.add('hidden-training') // Приховання повідомлення, якщо в масиві є тренування
+      ? emptyTrainingList.classList.remove('hidden-empty-list-training') // Відображення повідомлення, якщо масив порожній
+      : emptyTrainingList.classList.add('hidden-empty-list-training') // Приховання повідомлення, якщо в масиві є тренування
   } //---------------------------------------------------------------------------------
 
   // Створення нового тренування
@@ -567,7 +571,7 @@ class App {
       const markerIndexToDelete = arrOfMarkers.findIndex((everyMarker) => everyMarker.markerID === workoutId) // Пошук індексу маркера за markerID
 
       if (markerIndexToDelete !== -1) {
-        const deletedMarker = arrOfMarkers.splice(markerIndexToDelete, 1)[0] // Пошук індекса маркера, який потрібно видалити
+        const deletedMarker = arrOfMarkers.splice(markerIndexToDelete, 1)[0] // Пошук індексу маркера, який потрібно видалити
         deletedMarker.setMap(null) // Видалення маркера за найденим індексом
       }
     }
@@ -588,9 +592,9 @@ class App {
     this.availableTraining() // Додаю напис про порожній список тренувань якщо всі тренування видалено
   } //---------------------------------------------------------------------------------
 
-  // Метод сортування тренувань за типом
-  sortTraining(typeTraining) {
-    containerWorkouts.innerHTML = '' // Очищаємо контейнер перед додаванням відсортованих тренувань
+  // Метод фільтрування тренувань за типом
+  filterTraining(typeTraining) {
+    containerWorkouts.innerHTML = '' // Очищаємо контейнер перед додаванням відфільтрованих тренувань
     containerWorkouts.insertAdjacentElement('beforeend', form) // Відображення форми перед зверху всіх тренувань, інакше вона некорректно відображається
 
     // Якщо вибрано тренування бігу, то маркери велосипедних тренувань стають невидимими і навпаки.
@@ -608,15 +612,15 @@ class App {
     // Відображення тренувань при фільтрації від найновіших до найдавніших за часом.
     this.workouts
       .filter((workout) => workout.typeTraining === typeTraining) // Фільтрація тренувань за типом
-      .sort((a, b) => b.timestamp - a.timestamp) // Сортування тренувань від найновіших до найдавніших за часом
+      .sort((a, b) => b.timestamp - a.timestamp) // Фільтрування тренувань від найновіших до найдавніших за часом
       .forEach((el) => {
         containerWorkouts.insertAdjacentHTML('beforeend', el.insertTypeHtml) // Вставлення HTML коду тренування в кінець контейнера
       })
 
     // Показ або приховання повідомлення про відсутність тренувань певного типу
     !this.workouts.some((workout) => workout.typeTraining === typeTraining)
-      ? emptyTrainingList.classList.remove('hidden-training') // Відображення повідомлення, якщо немає тренувань обраного типу
-      : emptyTrainingList.classList.add('hidden-training') // Приховання повідомлення, якщо є тренування обраного типу
+      ? emptyTrainingList.classList.remove('hidden-empty-list-training') // Відображення повідомлення, якщо немає тренувань обраного типу
+      : emptyTrainingList.classList.add('hidden-empty-list-training') // Приховання повідомлення, якщо є тренування обраного типу
   } //---------------------------------------------------------------------------------
 
   // Метод скидання фільтра та відновлення відображення всіх типів тренувань та маркерів на сторінку.
@@ -708,10 +712,9 @@ const handleFormSubmit = () => {
   // Якщо всі поля заповнені, викликаємо необхідні функції
   if (!hasEmptyInput) {
     createNewMarker(map) // Створення нового маркера на карті
-    controlFormRowVisibility() // Додавання всім непотрібним інпутам класу hidden. Залишаються видимими тільки 4 перших.
+    controlFormRowVisibility() // Додавання всім непотрібним інпутам класу hidden. Залишаються видимими тільки 4 перші.
     resetForm() // Скидання значень форми
-
-    bouncingMark.setMap(null) // Видалення анімованого маркера
+    bouncingMark.setMap(null) // Видалення анімованого маркера, якщо він визначений
   }
 
   return !hasEmptyInput // Вертаємо флаг з протилежним значенням
@@ -825,7 +828,7 @@ const instructionForNewUser = (map) => {
     }, 1000)
     blurElement(emptyTrainingList, 'add') // Додаю блюр надпису "Список тренувань порожній"
     blurAndNoClick(disclosureWorkoutsContainer, 'add') // Додаю блюр і неможливість кліку на кнопку розгортання сайдбару
-    blurAndNoClick(sortButton, 'add') // Додаю блюр і неможливість кліку сортування
+    blurAndNoClick(filterButton, 'add') // Додаю блюр і неможливість кліку фільтрування
     blurAndNoClick(logo, 'add') // Додаю блюр і неможливість кліку на логотип
     disclosureWorkoutsContainer.style.background = 'transparent' // Додаю прозорий бекграунд для кнопки розгортання сайдбару
 
@@ -861,7 +864,7 @@ const instructionForNewUser = (map) => {
         el.addListener('click', () => {
           hideElement(startWindow3) // Після кліку на створений маркер ховаю інструкцію №3
           blurElement(emptyTrainingList, 'remove') // Знімаю блюр з надпису "Список тренувань порожній"
-          blurAndNoClick(sortButton, 'remove') // Знімаю блюр і неможливість кліку з сортування
+          blurAndNoClick(filterButton, 'remove') // Знімаю блюр і неможливість кліку з фільтрування
           blurAndNoClick(logo, 'remove') // Знімаю блюр і неможливість кліку з логотипа
           blurAndNoClick(containerWorkouts, 'remove') // Знімаю блюр і неможливість кліку з створеного тренування
           blurAndNoClick(disclosureWorkoutsContainer, 'remove') // Знімаю блюр і неможливість кліку з кнопки розгортання сайдбару
@@ -898,8 +901,8 @@ window.addEventListener('resize', updatePlaceholder) // Також виклик 
 
 // Функція для фільтру. При натисканні на тип тренування, чи скидання фільтра вони трансформуються.
 const scaleFilterItems = () => {
-  sortCheckBox.addEventListener('click', (e) => {
-    const checkboxes = sortCheckBox.querySelectorAll('.header__item-running, .header__item-cycling')
+  filterCheckBox.addEventListener('click', (e) => {
+    const checkboxes = filterCheckBox.querySelectorAll('.header__item-running, .header__item-cycling')
 
     // Перед натисканням на наступний фільтр скинути попередній.
     checkboxes.forEach((checkbox) => {
