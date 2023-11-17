@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!-- Підключення стилів -->
+    <link rel="stylesheet" href="dist/css/style.min.css" />
+    <!-- Фавікон -->
+    <link rel="apple-touch-icon" sizes="180x180" href="dist/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="dist/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="dist/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="dist/favicon/site.webmanifest" />
+    <link rel="mask-icon" href="dist/favicon/safari-pinned-tab.svg" color="#000000" />
+    <meta name="msapplication-TileColor" content="#2d89ef" />
+    <meta name="theme-color" content="#ffffff" />
+    <!-- Підключення шрифтів -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Підключення гугл карти -->
+    <script defer="defer">
+      ;((g) => {
+        var h,
+          a,
+          k,
+          p = 'The Google Maps JavaScript API',
+          c = 'google',
+          l = 'importLibrary',
+          q = '__ib__',
+          m = document,
+          b = window
+        b = b[c] || (b[c] = {})
+        var d = b.maps || (b.maps = {}),
+          r = new Set(),
+          e = new URLSearchParams(),
+          u = () =>
+            h ||
+            (h = new Promise(async (f, n) => {
+              await (a = m.createElement('script'))
+              e.set('libraries', [...r] + '')
+              for (k in g)
+                e.set(
+                  k.replace(/[A-Z]/g, (t) => '_' + t[0].toLowerCase()),
+                  g[k]
+                )
+              e.set('callback', c + '.maps.' + q)
+              a.src = `https://maps.${c}apis.com/maps/api/js?` + e
+              d[q] = f
+              a.onerror = () => (h = n(Error(p + ' could not load.')))
+              a.nonce = m.querySelector('script[nonce]')?.nonce || ''
+              m.head.append(a)
+            }))
+        d[l]
+          ? console.warn(p + ' only loads once. Ignoring:', g)
+          : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)))
+      })({ key: 'AIzaSyAdaPv3OwOWJX9kbh_kYbOKonnCx_3n-00' })
+    </script>
+    <!-- Підключення основного js -->
+    <script defer="defer" src="dist/js/script.js"></script>
+    <!-- Тайтл -->
+    <title>FitMap</title></head
+  ><!-- База -->
+  <body>
+    <!-- Мапа -->
+    <div id="map"></div>
+    <!-- Сайдбар -->
+    <div class="sidebar">
+      <!-- Кнопка розкриття та згортання сайдбару -->
+      <div class="sidebar__disclosure-training">
+        <img class="sidebar__arrow-icon" src="dist/icons/arrow-select.svg" alt="Стрілка обрання тренування" />
+      </div>
+      <!-- Надпис про не додані тренування в списку тренувань -->
+      <div class="sidebar__empty-training-list-wrap hidden-training">
+        <p class="sidebar__empty-training-list-text">Ви не додали жодних тренувань до списку</p>
+      </div>
+      <!-- Хедер -->
+      <div class="header">
+        <!-- Назва і логотип -->
+        <div class="header__icon-and-title-wrap">
+          <img class="header__icon-title" src="dist/icons/app-icon.svg" alt="Іконка заголовку" />
+          <h1 class="header__title">FitMap</h1>
+        </div>
+        <!-- Фільтрація тренувань -->
+        <div class="header__filter-wrap">
+          <!-- Обгортка для надпису "Фільтрувати" і іконки поряд -->
+          <div class="header__icon-and-text-wrap">
+            <p class="header__filter-text">Фільтрувати</p>
+            <img class="header__filter-icon" src="dist/icons/filter-arrow.svg" alt="Стрілка фільтрації" />
+          </div>
+          <!-- Розкритий фільтр фільтрації і кожний айтем всередині -->
+          <div class="header__checkbox-wrap">
+            <p class="header__item-running">Біг</p>
+            <img src="dist/icons/filter-line.svg" alt="Лінії між фільтрами" class="header__sort-line" />
+            <p class="header__item-cycling">Велосипед</p>
+            <img src="dist/icons/filter-line.svg" alt="Лінії між фільтрами" class="header__sort-line" />
+            <p class="header__item-clear">Скинути фільтри</p>
+          </div>
+        </div>
+        <!-- Надпис помилки, якщо не всі інпути заповнені -->
+        <div class="header__error-input-message-wrap">
+          <p class="header__error-input-message">Будь ласка, введи цифри від 1—9</p>
+        </div>
+      </div>
+      <!-- Контейнер з формою вводу та створеними тренуваннями -->
+      <ul class="workouts">
+        <!-- Форма вводу -->
+        <form class="form hidden" autocomplete="off">
+          <!-- Кнопка відправки форми -->
+          <div class="btn-wrap">
+            <button class="btn-wrap__button">
+              <img class="btn-wrap__icon" src="dist/icons/submit-button-form.svg" alt="" />
+            </button>
+          </div>
+          <!-- Вибір типу тренування -->
+          <div class="form__row">
+            <label class="form__label">Тип</label>
+            <select class="form__input form__input_type">
+              <option value="running">Біг</option>
+              <option value="cycling">Велосипед</option>
+            </select>
+          </div>
+          <!-- Інпут форми "Дистанція" -->
+          <div class="form__row">
+            <label class="form__label">Дистанція</label>
+            <input
+              class="form__input form__input_distance"
+              type="tel"
+              inputmode="decimal"
+              placeholder="кілометрів"
+              title="Ведіть цифри від 1—9"
+            />
+          </div>
+          <!-- Інпут форми "Тривалість" -->
+          <div class="form__row">
+            <label class="form__label">Тривалість</label>
+            <input
+              class="form__input form__input_duration"
+              type="tel"
+              inputmode="decimal"
+              placeholder="хвилин"
+              title="Ведіть цифри від 1—9"
+            />
+          </div>
+          <!-- Інпут форми "Темп" -->
+          <div class="form__row">
+            <label class="form__label">Темп</label>
+            <input
+              class="form__input form__input_cadence"
+              type="tel"
+              inputmode="decimal"
+              placeholder="кроків"
+              title="Ведіть цифри від 1—9"
+            />
+          </div>
+          <!-- Інпут форми "Пульс" -->
+          <div class="form__row form__row_hidden">
+            <label class="form__label">Пульс</label>
+            <input
+              class="form__input form__input_pulse"
+              type="tel"
+              inputmode="decimal"
+              placeholder="ударів/хв"
+              title="Ведіть цифри від 1—9"
+            />
+          </div>
+        </form>
+      </ul>
+    </div>
+    <!-- Інструкція для нових користувачів №1 -->
+    <div class="start-instruction-window-1 instruction-hidden">
+      <p class="start-instruction-text-1">
+        Привіт, людино<br />Відмічай тут свої тренування і стеж за показниками<br />Щоб почати,
+        <span class="start-instruction-bold">клікни на будь-якому місці карти</span>
+      </p>
+    </div>
+    <!-- Інструкція для нових користувачів №2 -->
+    <div class="start-instruction-window-2 instruction-hidden">
+      <p class="start-instruction-text-2">Тепер заповни дані у кожне поле і відправ</p>
+      <img class="start-instruction-arrow" src="dist/icons/arrow-for-instructions.svg" alt="Стрілка для заповнення форми" />
+    </div>
+    <!-- Інструкція для нових користувачів №3 -->
+    <div class="start-instruction-window-3 instruction-hidden">
+      <p class="start-instruction-text-3">
+        Твій маркер з тренуванням готовий<br /><span class="start-instruction-bold">Клікни на нього</span>, щоб подивитись
+        показники<br />
+      </p>
+    </div>
+    <!-- Порожній елемент фокусування -->
+    <div class="hidden-focus" tabindex="0"></div>
+  </body>
+</html>
