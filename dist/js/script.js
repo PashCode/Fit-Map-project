@@ -86,7 +86,7 @@ const handleGeolocationError = (error) => {
   <div class="errors-window">
     <div class="errors-window__content">
       <div class="errors-window__icon-wrap">
-        <img class="errors-window__icon" src="icons/error-geolocation.svg" alt="" />
+        <img class="errors-window__icon" src="dist/icons/error-geolocation.svg" alt="" />
       </div>
       <p class="errors-window__text">
       ${
@@ -207,7 +207,7 @@ const createMarkerAndInfoWindow = (
   markerId, // Айді маркера
   animate // Потрібна анімація, чи ні
 ) => {
-  const iconPath = typeTraining === 'running' ? 'marker-running.svg' : 'marker-cycling.svg' // Який маркер поставити на мапу, в залежності від типу тренування
+  const iconPath = typeTraining === 'running' ? 'dist/icons/marker-running.svg' : 'dist/icons/marker-cycling.svg' // Який маркер поставити на мапу, в залежності від типу тренування
   const animation = animate ? google.maps.Animation.DROP : null // Визначаємо анімацію на основі параметра `animate`
 
   // HTML розмітка інформаційного вікна для типу "Біг"
@@ -240,7 +240,7 @@ const createMarkerAndInfoWindow = (
   const marker = new google.maps.Marker({
     map, // До якої карти буде прив'язаний маркер
     position, // Позиція маркера на карті (широта і довгота)
-    icon: `icons/${iconPath}`, // Зображення, яке буде використовуватися як іконка маркера
+    icon: `${iconPath}`, // Зображення, яке буде використовуватися як іконка маркера
     animation: `${animation}`, // Анімація маркера зі змінної animation
     optimized: true, // Оптимізація маркера для підвищення продуктивності
     markerID: markerId, // Айді маркера
@@ -415,7 +415,7 @@ class TrainingComponents {
     }" data-workout-id="${this.trainingId}">
   
     <div class="workout__delete-wrap">
-    <img class="workout__delete-icon" src="icons/delete-workout-cross.svg" alt="Видалити тренування" />
+    <img class="workout__delete-icon" src="dist/icons/delete-workout-cross.svg" alt="Видалити тренування" />
   </div>
   
     <div class="workout__title-wrap">
