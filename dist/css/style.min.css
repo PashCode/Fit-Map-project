@@ -922,6 +922,7 @@ div.gm-bundled-control div.gmnoprint {
   background-color: #d3d3d3;
   box-shadow: 0 0 1rem 0.4rem rgba(0, 0, 0, 0.3);
   width: 40%;
+  z-index: 10;
 }
 @media (max-width: 1279px) {
   .start-instruction-window-1 {
@@ -959,7 +960,7 @@ div.gm-bundled-control div.gmnoprint {
   border-radius: 0.5rem;
   background-color: #d3d3d3;
   box-shadow: 0 0 1rem 0.4rem rgba(0, 0, 0, 0.3);
-  z-index: 100;
+  z-index: 10;
 }
 @media (max-width: 1279px) {
   .start-instruction-window-2 {
@@ -1003,8 +1004,8 @@ div.gm-bundled-control div.gmnoprint {
   border-radius: 0.5rem;
   background-color: #d3d3d3;
   box-shadow: 0 0 1rem 0.4rem rgba(0, 0, 0, 0.3);
-  z-index: 100;
   width: 40%;
+  z-index: 10;
 }
 @media (max-width: 1279px) {
   .start-instruction-window-3 {
