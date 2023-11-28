@@ -324,6 +324,9 @@ body {
   box-shadow: inset 0.2rem 0.5rem 1rem rgba(0, 0, 0, 0.3);
   transition: 0.3s;
 }
+.form__input::placeholder {
+  color: #636363;
+}
 .form__input:focus {
   background-color: #fff;
 }
@@ -420,7 +423,7 @@ body {
   background: #cd5c5c;
 }
 .delay-inputs-after-select {
-  background: #636363;
+  background: #292f38;
 }
 .form-scroll-top {
   top: 0;
