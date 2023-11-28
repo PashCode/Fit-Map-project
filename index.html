@@ -19,7 +19,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <!-- Підключення гугл карти -->
-    <script defer="defer">
+    <script defer>
       ;((g) => {
         var h,
           a,
@@ -57,7 +57,7 @@
       })({ key: 'AIzaSyAdaPv3OwOWJX9kbh_kYbOKonnCx_3n-00' })
     </script>
     <!-- Підключення основного js -->
-    <script defer="defer" src="dist/js/script.js"></script>
+    <script defer src="dist/js/script.js"></script>
     <!-- Тайтл -->
     <title>FitMap</title></head
   ><!-- База -->
@@ -99,7 +99,7 @@
         </div>
         <!-- Надпис помилки, якщо не всі інпути заповнені -->
         <div class="header__error-input-message-wrap">
-          <p class="header__error-input-message">Будь ласка, введи цифри від 1—9</p>
+          <p class="header__error-input-message">Будь ласка, заповніть усі поля</p>
         </div>
       </div>
       <!-- Контейнер з формою вводу та створеними тренуваннями -->
@@ -176,7 +176,9 @@
     </div>
     <!-- Інструкція для нових користувачів №2 -->
     <div class="start-instruction-window-2 instruction-hidden">
-      <p class="start-instruction-text-2">Тепер заповни дані у кожне поле і відправ</p>
+      <p class="start-instruction-text-2">
+        Тепер заповни дані у<span class="start-instruction-bold"> кожне поле</span> і відправ
+      </p>
       <img class="start-instruction-arrow" src="dist/icons/arrow-for-instructions.svg" alt="Стрілка для заповнення форми" />
     </div>
     <!-- Інструкція для нових користувачів №3 -->

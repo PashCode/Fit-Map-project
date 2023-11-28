@@ -193,6 +193,7 @@ const clickedOnMap = (map) => {
 } //---------------------------------------------------------------------------------
 
 let arrOfMarkers = [] // Масив для збереження кожного маркеру
+const removeLastDot = (value) => String(value).replace(/\.$/, '') // Функція для видалення останньої крапки у вписаному показнику
 
 // Функція для створення маркерів та інформаційних вікон
 const createMarkerAndInfoWindow = (
@@ -212,15 +213,17 @@ const createMarkerAndInfoWindow = (
 
   // HTML розмітка інформаційного вікна для типу "Біг"
   const infoWindowRunning = `
-  <span class="info-window-style-metrics">Показники &#10095;</span> ${distance} км • ${Number(duration)
+  <span class="info-window-style-metrics">Показники &#10095;</span> ${removeLastDot(distance)} км • ${Number(duration)
     .toFixed(2)
     .replace('.', ':')} хв •
-  ${cadence} кроків • ${(duration / distance).toFixed(2).replace('.', ':')} хв/км
+  ${removeLastDot(cadence)} кроків • ${(duration / distance).toFixed(2).replace('.', ':')} хв/км
   `
   // HTML розмітка інформаційного вікна для типу "Велосипед"
   const infoWindowCycling = `
-  <span class="info-window-style-metrics">Показники &#10095;</span> ${distance} км • ${duration} хв •
-  ${pulse} уд/хв • ${(distance / (duration / 60)).toFixed(2)} км/ч
+  <span class="info-window-style-metrics">Показники &#10095;</span> ${removeLastDot(distance)} км • ${removeLastDot(
+    duration
+  )} хв •
+  ${removeLastDot(pulse)} уд/хв • ${(distance / (duration / 60)).toFixed(2)} км/год
   `
   // Контент інформаційного вікна
   const content = `<div class="info-window-style">
@@ -391,8 +394,6 @@ const months = [
 
 class TrainingComponents {
   constructor() {
-    const removeLastDot = (value) => value.toString().replace(/\.$/, '') // Функція для видалення останньої крапки у вписаному показнику
-
     const currentDate = new Date() // Отримання поточної дати та часу
 
     // Кінцева дата та час тренування
